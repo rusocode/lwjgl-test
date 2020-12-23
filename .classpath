@@ -12,5 +12,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/juand/Downloads/pngdecoder-0.13.jar"/>
+	<classpathentry kind="lib" path="lib/pngdecoder-0.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
