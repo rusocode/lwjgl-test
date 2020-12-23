@@ -11,5 +11,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="lwjgl-test/Nativos lwjgl"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/juand/Downloads/pngdecoder-0.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
