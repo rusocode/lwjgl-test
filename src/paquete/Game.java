@@ -20,14 +20,14 @@ import org.lwjgl.opengl.DisplayMode;
 
 public class Game {
 
-	// Ya sea para habilitar el VSync en hardware
+	// Opcion para habilitar el VSync del hardware
 	public static final boolean VSYNC = true;
 
 	// Ancho y alto de la ventana
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 
-	// Si usa el modo de pantalla completa
+	// Pantalla completa
 	public static final boolean FULLSCREEN = false;
 
 	// Si nuestro bucle de juego se esta ejecutando
@@ -46,18 +46,18 @@ public class Game {
 		Display.setVSyncEnabled(VSYNC); // Si el hardware VSync esta habilitado
 		Display.setFullscreen(FULLSCREEN); // Si la pantalla completa esta habilitada
 
-		// Crea y mustra la pantalla
+		// Crea y muestra la pantalla
 		Display.create();
 
-		// Cree el contexto OpenGL e inicializa cualquier recurso
+		// Crea el contexto OpenGL e inicializa cualquier recurso
 		create();
 
-		// Llamar a este metodo antes de ejecutar para configurar el tamaño inicial
+		// Llamar a este metodo antes de ejecutar el juego para configurar el tamaño inicial
 		resize();
 
 		running = true;
 
-		// Mientras todavia se esta ejecutando y el usuario no ha cerrado la ventana, entonces...
+		// Mientras el juego se este ejecutando y no se cerro la ventana, entonces...
 		while (running && !Display.isCloseRequested()) {
 			// Si se cambio el tamaño del juego, actualiza la proyeccion
 			if (Display.wasResized()) resize();
@@ -75,12 +75,12 @@ public class Game {
 		Display.destroy();
 	}
 
-	// Sal del bucle de juego y cierra la ventana
+	// Cuando se cierra la ventana (metodo implicito)
 	public void exit() {
 		running = false;
 	}
 
-	// Metodo para configura el juego y contexto
+	// Configura el juego y contexto
 	protected void create() {
 		// Los juegos 2D generalmente no requieren pruebas de profundidad
 		glDisable(GL_DEPTH_TEST);
@@ -89,28 +89,27 @@ public class Game {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// Establecer claro a negro transparente
+		// Establece claro a negro transparente
 		glClearColor(0f, 0f, 0f, 0f);
 
 		// ... Inicializar los recursos aqui ...
 	}
 
-	// Llamado a renderizar nuestro juego
+	// Renderizado
 	protected void render() {
-		// Clear the screen
+		// Limpia la pantalla
 		glClear(GL_COLOR_BUFFER_BIT); // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glClear.xml
 		// https://stackoverflow.com/questions/5479951/what-is-the-purpose-of-gl-color-buffer-bit-and-gl-depth-buffer-bit
-		
-		// ... render our game here ...
+
 	}
 
-	// Metodo para cambiar el tamaño del juego
+	// Cambia el tamaño del juego
 	protected void resize() {
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		// ... Actualice la matriz de proyeccion aqui ...
 	}
 
-	// Metodo para destruir el juego
+	// Elimina los recursos
 	protected void dispose() {
 		// ... Deshacerse de las texturas, etc. ...
 	}

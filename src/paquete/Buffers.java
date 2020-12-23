@@ -1,10 +1,13 @@
 package paquete;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
+import static org.lwjgl.opengl.GL11.GL_MAX_TEXTURE_SIZE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 
 import org.lwjgl.BufferUtils;
 
@@ -74,6 +77,21 @@ public class Buffers {
 		buffer.flip();
 
 		// glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+		// Ejemplo de como obtener datos de GL
+		IntBuffer intBuffer = BufferUtils.createIntBuffer(16); // Crea un buffer con 16 elementos
+
+		/* Esto llamara al meotodo put() relativo con el tamaño maximo de texturas, luego continue "poniendo" ceros hasta que se
+		 * alcance la capacidad del buffer, entonces volteara nuestro buffer.
+		 * 
+		 * Como se describe en los documentos, GL_MAX_TEXTURE_SIZE nos dara un valor, pero como glGetInteger puede devolver
+		 * hasta 16 elementos, LWJGL espera que nuestro buffer tenga al menos eso como capacidad. Siempre que sea posible, debe
+		 * intentar reutilizar los buffers en lugar de crear siempre nuevos. */
+		// glGetInteger(GL_MAX_TEXTURE_SIZE);
+
+		/* Dado que nuestro buffer ya esta volteado, nuestra posicion sera cero... para que podamos seguir adelante y tomar el
+		 * primer elemento. */
+		int maxSize = glGetInteger(GL_MAX_TEXTURE_SIZE); // intBuffer.get();
 
 	}
 }
