@@ -14,7 +14,7 @@ import org.lwjgl.BufferUtils;
 /* BUFFERS -> https://github.com/mattdesl/lwjgl-basics/wiki/Java-NIO-Buffers */
 
 // Explicacion mas detalla de los buffers http://tutorials.jenkov.com/java-nio/buffers.html
-public class Buffers {
+public class Buffer {
 
 	public static void main(String[] args) {
 
