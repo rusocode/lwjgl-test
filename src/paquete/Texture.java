@@ -33,9 +33,9 @@ import de.matthiasmann.twl.utils.PNGDecoder;
 public class Texture {
 
 	/* Una imagen, como sabra, es simplemente una matriz de colores, renderizada en dos dimensiones, construida por pixeles
-	 * individuales. Hay varias formas de almacenar una imagen, para este ejemplo se usara el formato RGBA. RGB se refiere a
-	 * los canales rojo (red), verde (green) y azul (blue), y A (alpha) se refiere a la transparencia. Para este caso, cada
-	 * pixel de la imagen se compone de 4 bytes.
+	 * individuales. Hay varias formas de almacenar una imagen, para este ejemplo se usara el formato RGBA ocupando 4 bytes
+	 * por pixel. RGB se refiere a los canales rojo (red), verde (green) y azul (blue), y A (alpha) se refiere a la
+	 * transparencia.
 	 * 
 	 * Dado que una matriz de bytes puede volverse muy grande, generalmente usamos compresion como PNG o JPEG para disminuir
 	 * el tamaño del archivo final y distribuir la imagen para la web/correo electronico/etc.
@@ -69,21 +69,22 @@ public class Texture {
 	public static final int NEAREST = GL_NEAREST;
 
 	public static final int CLAMP = GL_CLAMP;
-	public static final int CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE;
+	public static final int CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE; // GL_CLAMP_TO_EDGE es parte de GL12
 	public static final int REPEAT = GL_REPEAT;
 
-	public Texture(URL pngRef) throws IOException {
-		/* Para los juegos de estilo "pixel-art", generalmente GL_NEAREST es adecuado ya que conduce a una escala de borde duro
-		 * sin desenfoque. */
-		this(pngRef, GL_NEAREST);
+	public Texture(URL url) throws IOException {
+		/* Para los juegos de estilo "pixel-art", generalmente la constante GL_NEAREST es adecuada para este caso, ya que
+		 * conduce a una escala de borde duro sin desenfoque. */
+		this(url, NEAREST);
 	}
 
-	public Texture(URL pngRef, int filter) throws IOException {
+	public Texture(URL url, int filter) throws IOException {
 		// Wrap (envoltura)
-		/* Para renderizar un objeto (ej. ladrillo), necesitamos darle a OpenGL cuatro vertices. Como puede ver, terminamos con
-		 * un quad 2D. Cada vertice tiene una serie de atributos, que incluyen Posicion (x, y) y Coordenadas de textura (s, t).
-		 * Las coordenadas de textura se definen en el espacio tangente, generalmente entre 0.0 y 1.0. Estos le dicen a OpenGL
-		 * donde tomar muestras de nuestros datos de textura.
+		/* Para renderizar un objeto (ej. img ladrillo), necesitamos darle a OpenGL cuatro vertices (En geometria, un vertice es
+		 * el punto donde se encuentran dos o mas elementos unidimensionales). Como puede ver, terminamos con un cuadrilatero
+		 * 2D. Cada vertice tiene una serie de atributos, que incluyen Posicion (x, y) y Coordenadas de textura (s, t). Las
+		 * coordenadas de textura se definen en el espacio tangente, generalmente entre 0.0 y 1.0. Estos le dicen a OpenGL donde
+		 * tomar muestras de nuestros datos de textura.
 		 * 
 		 * Nota: Esto depende de que nuestro sistema de coordenadas tenga un origen en la parte superior izquierda ("Y-abajo").
 		 * Algunas bibliotecas, como LibGDX, utilizaran el origen inferior izquierdo ("Y-arriba"), por lo que los valores de
@@ -94,14 +95,14 @@ public class Texture {
 		 * Los dos modos mas comunes son GL_CLAMP_TO_EDGE, que simplemente muestrea el color del borde, y GL_REPEAT, que
 		 * conducira a un patron repetido. Por ejemplo, el uso de 2.0 y GL_REPEAT hara que la imagen se repita dos veces dentro
 		 * del ancho y alto que especificamos. */
-		this(pngRef, filter, GL_CLAMP_TO_EDGE); // GL_CLAMP_TO_EDGE es parte de GL12
+		this(url, filter, CLAMP_TO_EDGE);
 	}
 
-	public Texture(URL pngRef, int filter, int wrap) throws IOException {
+	public Texture(URL url, int filter, int wrap) throws IOException {
 		InputStream input = null;
 		try {
 			// Abre una conexion de la URL especificada y devuelve un InputStream para leer desde esa conexion
-			input = pngRef.openStream();
+			input = url.openStream();
 
 			// Inicializa el decodificador
 			PNGDecoder dec = new PNGDecoder(input);
@@ -113,10 +114,10 @@ public class Texture {
 			// Estamos usando el formato RGBA, es decir, 4 componentes o "bytes por pixel"
 			final int bpp = 4;
 
-			// Crea un nuevo buffer de bytes que contendra los datos de los pixeles
+			// Crea un buffer que contendra los bytes totales de la imagen
 			ByteBuffer buf = BufferUtils.createByteBuffer(bpp * width * height);
 
-			// Decodifica la imagen en el buffer de bytes en formato RGBA
+			// Decodifica la imagen de tipo PNG en el buffer de bytes en formato RGBA
 			dec.decode(buf, width * bpp, PNGDecoder.Format.RGBA);
 
 			// Voltea el buffer en "modo lectura" para OpenGL
