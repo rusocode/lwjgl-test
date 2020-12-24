@@ -60,19 +60,19 @@ public class Buffers {
 			// Usando un "get" relativo, la posicion aumenta cada vez
 			System.out.println(array[posicion++]);
 
-		/* Entonces, ¿como se relaciona esto con LWJGL y OpenGL? Hay dos formas comunes en las que usara buferes: escribiendo
+		/* Entonces, ¿Como se relaciona esto con LWJGL y OpenGL? Hay dos formas comunes en las que usara buffers: escribiendo
 		 * datos en GL (es decir, cargando datos de textura en la GPU) o leyendo datos de GL (es decir, leyendo datos de textura
 		 * de la GPU u obteniendo un cierto valor del controlador). */
 
-		// Digamos que estamos creando una textura RGBA azul 1x1, nuestra configuracion de bufer se veria asi:
+		// Digamos que estamos creando una textura RGBA azul 1x1, nuestra configuracion del buffer se veria asi:
 		int width = 1; // 1 pixel de ancho
 		int height = 1; // 1 pixel de alto
 		int bpp = 4; // 4 bytes por pixel (RGBA) -> https://en.wikipedia.org/wiki/RGBA_color_model
 
-		buffer = BufferUtils.createByteBuffer(width * height * bpp);
+		buffer = BufferUtils.createByteBuffer(width * height * bpp); // Crea una imagen de 1 pixel (4 bytes)
 
-		// Pone los bytes Red, Green, Blue y Alpha en el buffer
-		buffer.put((byte) 0x00).put((byte) 0x00).put((byte) 0xFF).put((byte) 0xFF);
+		// Coloca los bytes Red, Green, Blue y Alpha en el buffer
+		buffer.put((byte) 0x00).put((byte) 0x00).put((byte) 0xFF).put((byte) 0xFF); // 1 pixel rojo
 
 		buffer.flip();
 

@@ -29,7 +29,7 @@ import org.lwjgl.BufferUtils;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 
-// Esta guia solo se enfocara en usar una unica unidad de textura
+// Esta guia solo se enfocara en usar una unica unidad de textura -> https://github.com/mattdesl/lwjgl-basics/wiki/Textures
 public class Texture {
 
 	/* Una imagen, como sabra, es simplemente una matriz de colores, renderizada en dos dimensiones, construida por pixeles
@@ -113,7 +113,7 @@ public class Texture {
 			// Estamos usando el formato RGBA, es decir, 4 componentes o "bytes por pixel"
 			final int bpp = 4;
 
-			// Crea un nuevo buffer de bytes que contendra los datos de pixeles
+			// Crea un nuevo buffer de bytes que contendra los datos de los pixeles
 			ByteBuffer buf = BufferUtils.createByteBuffer(bpp * width * height);
 
 			// Decodifica la imagen en el buffer de bytes en formato RGBA
@@ -143,6 +143,13 @@ public class Texture {
 
 			/* La llamada a glTexImage2D es lo que configura la textura real en OpenGL. */
 			glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf); // Pasa los datos RGBA a OpenGL
+
+			// Puede consultar el ancho y alto maximo de textura con lo siguiente
+			// int maxSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
+
+			/* En general, la mayoria de las computadoras modernas permiten texturas de al menos 4096x4096, pero si quieres estar
+			 * realmente seguro, puedes limitarte a 2048x2048. Si cree que va a trabajar con controladores antiguos o limitadores (o
+			 * Android, iOS, WebGL), es posible que desee limitarse a 1024x1024. */
 
 		} finally {
 			if (input != null) {
