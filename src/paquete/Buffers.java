@@ -18,8 +18,12 @@ public class Buffers {
 
 	public static void main(String[] args) {
 
-		// LWJGL incluye utilidades para crear facilmente buferes
-		ByteBuffer buffer = BufferUtils.createByteBuffer(4); // Crea un buffer con capacidad de 4 bytes
+		/* Un buffer es simplemente un bloque de memoria que contiene algunos datos. Para nuestros propositos, puede
+		 * considerarlo como una serie de elementos. Sin embargo, en lugar de acceso aleatorio (por ejemplo, matriz [i]), los
+		 * buffers leen y escriben datos relativos a su posicion actual. Para demostrarlo, digamos que deseamos crear un buffer
+		 * que contenga cuatro bytes y luego leer esos bytes. Lo crearias asi: */
+
+		ByteBuffer buffer = BufferUtils.createByteBuffer(4); // LWJGL incluye utilidades para crear facilmente buffers
 
 		// Coloca el byte y mueve la posicion hacia adelante
 		buffer.put((byte) 4);
@@ -27,7 +31,7 @@ public class Buffers {
 		buffer.put((byte) 45);
 		buffer.put((byte) 127);
 
-		/* Una vez que necesite leer los datos, debe cambiar el buffer del modo de escritura al modo de lectura usando el metodo
+		/* Una vez que necesite leer los datos, debe cambiar el buffer del modo escritura al modo lectura usando el metodo
 		 * flip(). */
 		buffer.flip(); // Restablece la posicion a cero
 
@@ -38,33 +42,34 @@ public class Buffers {
 		// Despues de leer los datos hay que borrar todo el buffer para poder escribir nuevamente
 		buffer.clear();
 
-		// Para entender lo que esta sucediendo, comparemoslo con una matriz de Java
+		/* Para entender lo que esta sucediendo, comparemoslo con una matriz de Java. */
 
-		// Crea la matriz de tamaño fijo
+		// Crea una matriz de 4 elementos (tamaño fijo)
 		byte[] array = new byte[4];
 
-		// La posicion comienza en 0
+		// Inicializa la posicion en 0
 		int posicion = 0;
 
-		// Usando un "put" relativo, la posicion aumenta cada vez
+		// Asigna el valor a la posicion y la incrementa (put relativo)
 		array[posicion++] = 4;
 		array[posicion++] = 3;
 		array[posicion++] = 45;
 		array[posicion++] = 127;
 
-		// "cambia" nuestra posicion/limite
+		// Metodo flip() casero :D
 		int limite = posicion;
 		posicion = 0;
 
 		for (int i = 0; i < limite; i++)
-			// Usando un "get" relativo, la posicion aumenta cada vez
-			System.out.println(array[posicion++]);
+			System.out.println(array[posicion++]); // get relativo
+
+		/* . . . */
 
 		/* Entonces, ¿Como se relaciona esto con LWJGL y OpenGL? Hay dos formas comunes en las que usara buffers: escribiendo
 		 * datos en GL (es decir, cargando datos de textura en la GPU) o leyendo datos de GL (es decir, leyendo datos de textura
 		 * de la GPU u obteniendo un cierto valor del controlador). */
 
-		// Digamos que estamos creando una textura RGBA azul 1x1, nuestra configuracion del buffer se veria asi:
+		// Digamos que estamos creando una textura RGBA rojo 1x1, nuestra configuracion del buffer se veria asi:
 		int width = 1; // 1 pixel de ancho
 		int height = 1; // 1 pixel de alto
 		int bpp = 4; // 4 bytes por pixel (RGBA) -> https://en.wikipedia.org/wiki/RGBA_color_model
@@ -72,7 +77,7 @@ public class Buffers {
 		buffer = BufferUtils.createByteBuffer(width * height * bpp); // Crea una imagen de 1 pixel (4 bytes)
 
 		// Coloca los bytes Red, Green, Blue y Alpha en el buffer
-		buffer.put((byte) 0x00).put((byte) 0x00).put((byte) 0xFF).put((byte) 0xFF); // 1 pixel rojo
+		buffer.put((byte) 0xFF).put((byte) 0x00).put((byte) 0x00).put((byte) 0xFF); // = 1 pixel rojo
 
 		buffer.flip();
 
