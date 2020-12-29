@@ -19,7 +19,7 @@ public class Buffer {
 	public static void main(String[] args) {
 
 		/* Un buffer es simplemente un bloque de memoria que contiene algunos datos. Para nuestros propositos, puede
-		 * considerarlo como una serie de elementos. Sin embargo, en lugar de acceso aleatorio (por ejemplo, matriz [i]), los
+		 * considerarlo como una serie de elementos. Sin embargo, en lugar de acceso aleatorio (por ejemplo, matriz[i]), los
 		 * buffers leen y escriben datos relativos a su posicion actual. Para demostrarlo, digamos que deseamos crear un buffer
 		 * que contenga cuatro bytes y luego leer esos bytes. Lo crearias asi: */
 
@@ -39,18 +39,18 @@ public class Buffer {
 		for (int i = 0; i < buffer.limit(); i++)
 			System.out.println(buffer.get());
 
-		// Despues de leer los datos hay que borrar todo el buffer para poder escribir nuevamente
+		// Despues de leer todos los datos, hay que borrar el buffer para poder escribir nuevamente sobre el
 		buffer.clear();
 
 		/* Para entender lo que esta sucediendo, comparemoslo con una matriz de Java. */
 
-		// Crea una matriz de 4 elementos (tamaño fijo)
+		// Crea un array de 4 elementos (tamaño fijo)
 		byte[] array = new byte[4];
 
 		// Inicializa la posicion en 0
 		int posicion = 0;
 
-		// Asigna el valor a la posicion y la incrementa (put relativo)
+		// Asigna el valor al array e incrementa la posicion (put relativo)
 		array[posicion++] = 4;
 		array[posicion++] = 3;
 		array[posicion++] = 45;

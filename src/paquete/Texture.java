@@ -32,10 +32,10 @@ import de.matthiasmann.twl.utils.PNGDecoder;
 // Esta guia solo se enfocara en usar una unica unidad de textura -> https://github.com/mattdesl/lwjgl-basics/wiki/Textures
 public class Texture {
 
-	/* Una imagen, como sabra, es simplemente una matriz de colores, renderizada en dos dimensiones, construida por pixeles
-	 * individuales. Hay varias formas de almacenar una imagen, para este ejemplo se usara el formato RGBA ocupando 4 bytes
-	 * por pixel. RGB se refiere a los canales rojo (red), verde (green) y azul (blue), y A (alpha) se refiere a la
-	 * transparencia.
+	/* Una imagen, como sabra, es simplemente una matriz de colores, renderizada en dos dimensiones
+	 * (https://es.wikipedia.org/wiki/Dimensi%C3%B3n), construida por pixeles individuales. Hay varias formas de almacenar
+	 * una imagen, para este ejemplo se usara el formato RGBA ocupando 4 bytes por pixel. RGB se refiere a los canales rojo
+	 * (red), verde (green) y azul (blue), y A (alpha) se refiere a la transparencia.
 	 * 
 	 * Dado que una matriz de bytes puede volverse muy grande, generalmente usamos compresion como PNG o JPEG para disminuir
 	 * el tamaño del archivo final y distribuir la imagen para la web/correo electronico/etc.
@@ -115,26 +115,26 @@ public class Texture {
 			final int bpp = 4;
 
 			// Crea un buffer que contendra los bytes totales de la imagen
-			ByteBuffer buf = BufferUtils.createByteBuffer(bpp * width * height);
+			ByteBuffer buf = BufferUtils.createByteBuffer(width * height * bpp); // bpp * width * height
 
-			// Decodifica la imagen de tipo PNG en el buffer de bytes en formato RGBA
+			// 1) Decodifica la imagen de tipo PNG en el buffer de bytes en formato RGBA
 			dec.decode(buf, width * bpp, PNGDecoder.Format.RGBA);
 
 			// Voltea el buffer en "modo lectura" para OpenGL
 			buf.flip();
 
-			// Habilita el texturizado y genera una identificacion para que GL sepa que textura enlazar
+			// 2) Habilita el texturizado y genera una identificacion para que GL sepa que textura enlazar
 			glEnable(target);
 			id = glGenTextures();
 
-			// Enlaza la textura
+			// 3) Enlaza la textura
 			glBindTexture(target, id);
 
 			/* Usa una alineacion de 1 para estar seguro. Esto le dice a OpenGL como descomprimir los bytes RGBA que
 			 * especificaremos. */
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Configura el modo de desempaquetar
 
-			// Configura los parametros
+			// 4) Configura los parametros
 			// Configurar el filtrado, es decir, como OpenGL interpolara los pixeles al escalar hacia arriba o hacia abajo
 			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filter);
 			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, filter);
@@ -142,7 +142,7 @@ public class Texture {
 			glTexParameteri(target, GL_TEXTURE_WRAP_S, wrap);
 			glTexParameteri(target, GL_TEXTURE_WRAP_T, wrap);
 
-			/* La llamada a glTexImage2D es lo que configura la textura real en OpenGL. */
+			/* 5) La llamada a glTexImage2D es lo que configura la textura real en OpenGL. */
 			glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf); // Pasa los datos RGBA a OpenGL
 
 			// Puede consultar el ancho y alto maximo de textura con lo siguiente

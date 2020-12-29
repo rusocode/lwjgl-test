@@ -57,7 +57,7 @@ public class Game {
 
 		running = true;
 
-		// Mientras el juego se este ejecutando y no se cerro la ventana, entonces...
+		// Mientras el juego se este ejecutando y no se cierre la ventana, entonces...
 		while (running && !Display.isCloseRequested()) {
 			// Si se cambio el tamaño del juego, actualiza la proyeccion
 			if (Display.wasResized()) resize();
