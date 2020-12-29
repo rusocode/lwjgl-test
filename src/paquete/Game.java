@@ -95,7 +95,7 @@ public class Game {
 		// ... Inicializar los recursos aqui ...
 	}
 
-	// Renderizado
+	// Renderizado -> https://www.youtube.com/watch?v=cvcAjgMUPUA
 	protected void render() {
 		// Limpia la pantalla
 		glClear(GL_COLOR_BUFFER_BIT); // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glClear.xml

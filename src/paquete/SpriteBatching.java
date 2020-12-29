@@ -18,9 +18,9 @@ public class SpriteBatching {
 
 	// SpriteBatch spriteBatch = new SpriteBatch();
 
-	// called on game creation
+	// Llamado a la creacion del juego
 	public void create() {
-		// create a single batcher we will use throughout our application
+		// Crea un solo lote que usaremos en toda nuestra aplicacion
 		// spriteBatch = new SpriteBatch();
 	}
 
