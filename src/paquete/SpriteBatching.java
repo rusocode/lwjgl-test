@@ -1,5 +1,7 @@
 package paquete;
 
+import static org.lwjgl.opengl.GL11.*;
+
 // La API lwjgl-basics incluye una implementacion minima de SpriteBatch de uso gratuito: esta modelada segun el batcher en LibGDX.
 // https://github.com/mattdesl/lwjgl-basics/blob/master/src/mdesl/graphics/SpriteBatch.java
 public class SpriteBatching {
@@ -20,12 +22,29 @@ public class SpriteBatching {
 
 	// SpriteBatch spriteBatch = new SpriteBatch();
 
+	public static void main(String[] args) {
+		new SpriteBatching().create();
+	}
+
 	public void create() {
 		// Crea un solo lote que usaremos en toda nuestra aplicacion
 		// spriteBatch = new SpriteBatch();
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity(); // Resets any previous projection matrices
+		glOrtho(0, 640, 480, 0, 1, -1);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	public void render() {
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glBegin(GL_TRIANGLES);
+
+		glVertex2f(1.0f, 1.0f);
+
+		glEnd();
+
 		// Preparar el lote para renderizar
 		// spriteBatch.begin();
 
@@ -97,7 +116,7 @@ public class SpriteBatching {
 
 	// spriteBatch.end();
 
-	// ¡Triqngulos, no Cuadrados!
+	// ¡Triangulos, no Cuadrados!
 	/* En la serie anterior, hemos estado pensando en texturas como cuadriculas, pero en realidad la mayoria de los
 	 * SpriteBatch usaran dos triangulos adyacentes para representar un sprite rectangular. Los vertices pueden ordenarse de
 	 * manera diferente segun el motor (LibGDX tiende a usar el origen inferior izquierdo).
@@ -106,4 +125,8 @@ public class SpriteBatching {
 	 * forman Posicion, TexCoord y Color. Esto significa que con cada sprite, ¡estamos empujando 48 flotadores a la pila! Un
 	 * mezclador de sprites mas optimizado podria empaquetar el RGBA en un solo flotador, o podria renunciar a los colores
 	 * de los vertices por completo. */
+
+	// Lote de rectangulos y lineas
+	// https://github.com/mattdesl/lwjgl-basics/wiki/Batching-Rectangles-and-Lines
+
 }
