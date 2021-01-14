@@ -17,6 +17,13 @@ public class Game {
 	public static final int WIDTH = 640; // 800
 	public static final int HEIGHT = 480; // 600
 
+	private final int LEFT = 0;
+	private final int RIGHT = WIDTH;
+	private final int TOP = HEIGHT;
+	private final int BOTTOM = 0;
+	private final int NEAR = 1;
+	private final int FAR = -1;
+
 	// Pantalla completa
 	public static final boolean FULLSCREEN = false;
 
@@ -89,10 +96,19 @@ public class Game {
 		// Si omite la invocacion del metodo glOrtho, el espacio de coordenadas de proyeccion 2D predeterminado sera asi:
 		// Upper-Left: (-1,+1) Upper-Right: (+1,+1)
 		// Bottom-Left: (-1,-1) Bottom-Right: (+1,-1)
-		glMatrixMode(GL_PROJECTION);
+		/* Un monitor de computadora es una superficie 2D. Una escena 3D renderizada por OpenGL debe proyectarse en la pantalla
+		 * de la computadora como una imagen 2D. La matriz GL_PROJECTION se utiliza para esta transformacion de proyeccion.
+		 * http://www.songho.ca/opengl/gl_projectionmatrix.html */
+		glMatrixMode(GL_PROJECTION); // Lente
 		// glLoadIdentity(); // Restablece cualquier matriz de proyeccion anterior
-		glOrtho(0, 640, 480, 0, 1, -1);
-		glMatrixMode(GL_MODELVIEW);
+		glOrtho(LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR); // https://stackoverflow.com/questions/2571402/how-to-use-glortho-in-opengl
+		// left: x minima
+		// right: x maxima
+		// bottom: y minima
+		// top: y maxima
+		// near: z minima, si esto esta cerca de -1 veces. Entonces, una entrada negativa significa z positiva.
+		// far: z maxima (tambien negativa)
+		glMatrixMode(GL_MODELVIEW); // Camara
 
 		// Establece claro a negro transparente
 		// glClearColor(0f, 0f, 0f, 0f);
@@ -116,18 +132,18 @@ public class Game {
 		 * poligono. */
 		// >> glColor establece el color actual (a todas las llamadas posteriores a glVertex se les asignara este color)
 		// >> El numero despues de 'glVertex'/'glColor' indica la cantidad de componentes (xyzw / rgba)
-		// >> El caracter despues del numero indica el tipo de argumentos
+		// >> El caracter despues del numero indica el tipo de argumento
 		// >> (para 'glVertex': d=Double, f=Float, i=Integer)
 		// >> (para 'glColor': d=Double, f=Float, b=Signed Byte, ub=Unsigned Byte)
-		glColor3f(1.0f, 0.0f, 0.0f); // Pure Green
-		glVertex2i(0, 0); // Upper-left
-		glColor3b((byte) 0, (byte) 127, (byte) 0); // Pure Red
-		glVertex2d(640.0, 0.0); // Upper-right
-		glColor3ub((byte) 255, (byte) 255, (byte) 255); // White
-		glVertex2f(640.0f, 480.0f); // Bottom-right
-		glColor3d(0.0d, 0.0d, 1.0d); // Pure Blue
-		glVertex2i(0, 480); // Bottom-left
-		// If we put another four calls to glVertex2i here, a second quadrilateral will be drawn.
+		glColor3f(1.0f, 0.0f, 0.0f); // Verde puro
+		glVertex2i(0, 0); // Arriba a la izquierda
+		glColor3b((byte) 0, (byte) 127, (byte) 0); // Rojo puro
+		glVertex2d(640.0, 0.0); // Arriba a la derecha
+		glColor3ub((byte) 255, (byte) 255, (byte) 255); // Blanco
+		glVertex2f(640.0f, 480.0f); // Abajo a la derecha
+		glColor3d(0.0d, 0.0d, 1.0d); // Azul puro
+		glVertex2i(0, 480); // Abajo a la izquierda
+
 		glEnd();
 
 	}
