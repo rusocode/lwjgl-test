@@ -80,7 +80,7 @@ public class Texture {
 
 	public Texture(URL url, int filter) throws IOException {
 		// Wrap (envoltura)
-		/* Para renderizar un objeto (ej. img ladrillo), necesitamos darle a OpenGL cuatro vertices (En geometria, un vertice es
+		/* Para renderizar un objeto (ej. ladrillo), necesitamos darle a OpenGL cuatro vertices (en geometria, un vertice es
 		 * el punto donde se encuentran dos o mas elementos unidimensionales). Como puede ver, terminamos con un cuadrilatero
 		 * 2D. Cada vertice tiene una serie de atributos, que incluyen Posicion (x, y) y Coordenadas de textura (s, t). Las
 		 * coordenadas de textura se definen en el espacio tangente, generalmente entre 0.0 y 1.0. Estos le dicen a OpenGL donde

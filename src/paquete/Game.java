@@ -13,22 +13,23 @@ public class Game {
 	// Opcion para habilitar el VSync del hardware
 	public static final boolean VSYNC = true;
 
+	// Pantalla completa
+	public static final boolean FULLSCREEN = false;
+
+	// Si nuestro bucle de juego se esta ejecutando
+	protected boolean running = false;
+
 	// Ancho y alto de la ventana
 	public static final int WIDTH = 640; // 800
 	public static final int HEIGHT = 480; // 600
 
+	// Parametros para glOrtho()
 	private final int LEFT = 0;
 	private final int RIGHT = WIDTH;
 	private final int TOP = HEIGHT;
 	private final int BOTTOM = 0;
 	private final int NEAR = 1;
 	private final int FAR = -1;
-
-	// Pantalla completa
-	public static final boolean FULLSCREEN = false;
-
-	// Si nuestro bucle de juego se esta ejecutando
-	protected boolean running = false;
 
 	public static void main(String[] args) throws LWJGLException {
 		new Game().start();
@@ -127,6 +128,10 @@ public class Game {
 		// >> glBegin acepta un solo argumento que especifica como se interpretan los vertices
 		/* Todas las proximas llamadas a vertices se tomaran como puntos de un cuadrilatero hasta que se llame a glEnd. Dado que
 		 * esta primitiva requiere cuatro vertices, tendremos que llamar a glVertex cuatro veces. */
+
+		/* Modo inmediato (obsoleto)
+		 * (https://stackoverflow.com/questions/6733934/what-does-immediate-mode-mean-in-opengl/36166310#36166310) */
+
 		glBegin(GL_QUADS);
 		/* >> Los comandos glVertex se utilizan dentro de los pares glBegin/glEnd para especificar vertices de punto, linea y
 		 * poligono. */
@@ -135,15 +140,19 @@ public class Game {
 		// >> El caracter despues del numero indica el tipo de argumento
 		// >> (para 'glVertex': d=Double, f=Float, i=Integer)
 		// >> (para 'glColor': d=Double, f=Float, b=Signed Byte, ub=Unsigned Byte)
+		/* El numero 2 de glVertex le indica cuantos componentes tendra el vertice (x e y), siendo un modelo 2D en este caso. Si
+		 * se envia un vertice a OpenGL, vincula el estado del color actual al vertice y lo dibuja en consecuencia. Los valores
+		 * de color para dobles y flotantes varian de 0.0 a 1.0 y para bytes sin firmar varian de 0 a 255. */
 		glColor3f(1.0f, 0.0f, 0.0f); // Verde puro
-		glVertex2i(0, 0); // Arriba a la izquierda
+		glVertex2i(0, 0);
 		glColor3b((byte) 0, (byte) 127, (byte) 0); // Rojo puro
-		glVertex2d(640.0, 0.0); // Arriba a la derecha
+		glVertex2d(640.0, 0.0);
 		glColor3ub((byte) 255, (byte) 255, (byte) 255); // Blanco
-		glVertex2f(640.0f, 480.0f); // Abajo a la derecha
+		glVertex2f(640.0f, 480.0f);
 		glColor3d(0.0d, 0.0d, 1.0d); // Azul puro
-		glVertex2i(0, 480); // Abajo a la izquierda
+		glVertex2i(0, 480);
 
+		// Cuando haya terminado de enviar datos de vertices a OpenGL, puede dejar de renderizar escribiendo:
 		glEnd();
 
 	}
