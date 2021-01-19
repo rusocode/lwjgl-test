@@ -8,6 +8,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 /* MONITOR -> https://github.com/mattdesl/lwjgl-basics/wiki/Display */
 
+// Terminologia:
+// - Vertice: un punto en el espacio 2D o 3D 
+// - Primitivo: una forma simple que consta de uno o mas vertices
+
 public class Game {
 
 	// Opcion para habilitar el VSync del hardware
