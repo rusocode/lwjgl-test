@@ -12,66 +12,106 @@ import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
+// Uso de las clases de teclado y mouse con LWJGL
+
 public class Input {
 
 	private static final List<Box> shapes = new ArrayList<Box>(16);
 	private static boolean somethingIsSelected = false;
 	private static long lastColourChange;
 
+	protected boolean running = false;
+
 	public static void main(String args[]) {
 		try {
-			Display.setDisplayMode(new DisplayMode(640, 480));
-			Display.setTitle("Input Demo");
-			Display.create();
+			new Input().start();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			Display.destroy();
 			System.exit(1);
 		}
-		shapes.add(new Box(15, 15));
-		shapes.add(new Box(100, 150));
-		glMatrixMode(GL_PROJECTION);
-		glOrtho(0, 640, 480, 0, 1, -1);
-		glMatrixMode(GL_MODELVIEW);
-		while (!Display.isCloseRequested()) {
-			glClear(GL_COLOR_BUFFER_BIT);
-			while (Keyboard.next()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_C && Keyboard.getEventKeyState()) {
-					shapes.add(new Box(15, 15));
-				}
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-				Display.destroy();
-				System.exit(0);
-			}
-			for (final Box box : shapes) {
-				if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-					somethingIsSelected = true;
-					box.selected = true;
-				}
-				if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-					if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
-						box.randomiseColors();
-						lastColourChange = System.currentTimeMillis();
-					}
-				}
-				if (Mouse.isButtonDown(1)) {
-					box.selected = false;
-					somethingIsSelected = false;
-				}
+	}
 
-				if (box.selected) {
-					box.update(Mouse.getDX(), -Mouse.getDY());
-				}
+	public void start() throws LWJGLException {
 
-				box.draw();
-			}
+		Display.setDisplayMode(new DisplayMode(640, 480));
+		Display.setTitle("Input Demo");
+		Display.create();
+
+		// Crea una caja en el eje de coordenadas x=15:y=20 y la agrega a la coleccion de tipo List
+		shapes.add(new Box(15, 20));
+
+		create();
+
+		running = true;
+
+		while (running && !Display.isCloseRequested()) {
+
+			render();
 
 			Display.update();
 			Display.sync(60);
+
 		}
 
 		Display.destroy();
+
+	}
+
+	private void create() {
+
+		// Creacion del lente para la transformacion de la escena 3D a 2D en la pantalla
+		glMatrixMode(GL_PROJECTION);
+		// Creacion del sistema de coordenadas de vertice 2D
+		glOrtho(0, 640, 480, 0, 1, -1);
+		// Creacion de la camara
+		glMatrixMode(GL_MODELVIEW);
+
+	}
+
+	private void render() {
+
+		// Limpia la pantalla en cada renderizacion
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKey() == Keyboard.KEY_C && Keyboard.getEventKeyState()) {
+				shapes.add(new Box(15, 15));
+			}
+		}
+
+		// Si se preciono la tecla de escape, cierra la aplicacion
+		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+			Display.destroy();
+			System.exit(0);
+		}
+
+		for (final Box box : shapes) {
+
+			// Cuando se selecciona la caja
+			if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
+				somethingIsSelected = true;
+				box.selected = true;
+			}
+
+			if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
+				System.out.println("Mouse 2");
+				if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
+					box.randomiseColors();
+					lastColourChange = System.currentTimeMillis();
+				}
+			}
+
+			// Cuando se suelta la caja
+			if (Mouse.isButtonDown(1)) {
+				box.selected = false;
+				somethingIsSelected = false;
+			}
+
+			if (box.selected) box.update(Mouse.getDX(), -Mouse.getDY());
+
+			box.draw();
+		}
 	}
 
 	private static class Box {
@@ -94,6 +134,7 @@ public class Input {
 			return mouseX > x && mouseX < x + 50 && mouseY > y && mouseY < y + 50;
 		}
 
+		// dx/dy significan delta-x y delta-y
 		void update(int dx, int dy) {
 			x += dx;
 			y += dy;
@@ -107,13 +148,18 @@ public class Input {
 		}
 
 		void draw() {
+
 			glColor3f(colorRed, colorGreen, colorBlue);
+
 			glBegin(GL_QUADS);
+
 			glVertex2f(x, y);
 			glVertex2f(x + 50, y);
 			glVertex2f(x + 50, y + 50);
 			glVertex2f(x, y + 50);
+
 			glEnd();
 		}
+
 	}
 }
