@@ -62,8 +62,12 @@ public class Input {
 
 		// Creacion del lente para la transformacion de la escena 3D a 2D en la pantalla
 		glMatrixMode(GL_PROJECTION);
+		/* La razon por la que tienes que invertir getDY() es porque OpenGL esta destinado a tener el origen tambien conocido
+		 * como (0,0) en la parte inferior izquierda. */
 		// Creacion del sistema de coordenadas de vertice 2D
-		glOrtho(0, 640, 480, 0, 1, -1);
+		// Esquina superior izquierda: glOrtho(0, 640, 480, 0, 1, -1)
+		// Esquina inferior izquierda: glOrtho(0, 640, 0, 480, 1, -1)
+		glOrtho(0, 640, 0, 480, 1, -1);
 		// Creacion de la camara
 		glMatrixMode(GL_MODELVIEW);
 
@@ -71,31 +75,44 @@ public class Input {
 
 	private void render() {
 
+		// Posicion
+		System.out.println("X=" + Mouse.getX() + ":Y=" + Mouse.getY());
+
 		// Limpia la pantalla en cada renderizacion
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		/* Keyboard.next() obtiene el proximo evento de teclado. Puede consultar que clave causo el evento utilizando
+		 * getEventKey. Para obtener el estado de esa clave, para ese evento, use getEventKeyState; finalmente use
+		 * getEventCharacter para obtener el caracter de ese evento. */
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_C && Keyboard.getEventKeyState()) {
-				shapes.add(new Box(15, 15));
-			}
+
+			// Si se pulso la tecla C y si la tecla estaba presionada getEventKeyState() o falsa si se solto, entonces...
+			if (Keyboard.isKeyDown(Keyboard.KEY_C) && Keyboard.getEventKeyState()) shapes.add(new Box(15, 15));
+
+			// Keyboard.getEventKey() == Keyboard.KEY_C <-- Otra forma de comprobar si se pulso una tecla
+
 		}
 
-		// Si se preciono la tecla de escape, cierra la aplicacion
+		// Si se pulso la tecla escape, cierra la aplicacion
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 			Display.destroy();
 			System.exit(0);
 		}
 
+		// getX() devuelve la posicion absoluta del eje x
+		// getDX() devuelve el movimiento en el eje x desde la ultima vez que se llamo a getDX()
+
+		// Controla cada caja con el for
 		for (final Box box : shapes) {
 
 			// Cuando se selecciona la caja
-			if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
+			// "480 - Mouse.getY()" se invierte Y para el origen superior izquierdo
+			if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), Mouse.getY()) && !somethingIsSelected) {
 				somethingIsSelected = true;
 				box.selected = true;
 			}
 
-			if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-				System.out.println("Mouse 2");
+			if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), Mouse.getY()) && !somethingIsSelected) {
 				if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
 					box.randomiseColors();
 					lastColourChange = System.currentTimeMillis();
@@ -108,7 +125,7 @@ public class Input {
 				somethingIsSelected = false;
 			}
 
-			if (box.selected) box.update(Mouse.getDX(), -Mouse.getDY());
+			if (box.selected) box.update(Mouse.getDX(), Mouse.getDY()); // "-Mouse.getDY()" se invierte Y para el origen superior izquierdo
 
 			box.draw();
 		}
