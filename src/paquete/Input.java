@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// LWJGL maneja la ventana de forma estatica
 import static org.lwjgl.opengl.GL11.*;
 
 // Uso de las clases de teclado y mouse con LWJGL
@@ -36,7 +37,7 @@ public class Input {
 
 		Display.setDisplayMode(new DisplayMode(640, 480));
 		Display.setTitle("Input Demo");
-		Display.create();
+		Display.create(); // Crea una pantalla con el modo de visualizacion y el titulo especificados
 
 		// Crea una caja en el eje de coordenadas x=15:y=20 y la agrega a la coleccion de tipo List
 		shapes.add(new Box(15, 20));
@@ -45,12 +46,13 @@ public class Input {
 
 		running = true;
 
+		// Bucle de renderizacion en donde se realiza el manejo de entradas, la logica del juego y la adm de recursos
 		while (running && !Display.isCloseRequested()) {
 
 			render();
 
-			Display.update();
-			Display.sync(60);
+			Display.update(); // Actualizacion del procesamiento
+			Display.sync(60); // Sincroniza la pantalla a 60 fps (16.67 milisegundos)
 
 		}
 
@@ -60,8 +62,11 @@ public class Input {
 
 	private void create() {
 
+		/* OpenGL es un motor basado en estados, lo que significa que mucho de estos metodos especifican estados. */
+
 		// Creacion del lente para la transformacion de la escena 3D a 2D en la pantalla
 		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		/* La razon por la que tienes que invertir getDY() es porque OpenGL esta destinado a tener el origen tambien conocido
 		 * como (0,0) en la parte inferior izquierda. */
 		// Creacion del sistema de coordenadas de vertice 2D
@@ -75,11 +80,11 @@ public class Input {
 
 	private void render() {
 
-		// Posicion
-		System.out.println("X=" + Mouse.getX() + ":Y=" + Mouse.getY());
-
 		// Limpia la pantalla en cada renderizacion
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		// Posicion
+		System.out.println("X=" + Mouse.getX() + ":Y=" + Mouse.getY());
 
 		/* Keyboard.next() obtiene el proximo evento de teclado. Puede consultar que clave causo el evento utilizando
 		 * getEventKey. Para obtener el estado de esa clave, para ese evento, use getEventKeyState; finalmente use
@@ -129,6 +134,7 @@ public class Input {
 
 			box.draw();
 		}
+
 	}
 
 	private static class Box {
@@ -168,13 +174,20 @@ public class Input {
 
 			glColor3f(colorRed, colorGreen, colorBlue);
 
+			/* la mayoria de los dosificadores de sprites usan dos triangulos adyacentes para representar un sprite rectangular. */
+			/* glBegin(GL_QUADS);
+			 * 
+			 * // Conjuntos de vertices que juntos forman una primitiva (triangulos), dando un cuadrado como resultado glVertex2f(x,
+			 * y); glVertex2f(x + 50, y); glVertex2f(x + 50, y + 50); glVertex2f(x, y + 50);
+			 * 
+			 * glEnd(); */
+
+			// Dibuja una linea desde la posicion 0,0 hasta la 50,50, usando dos vertices
 			glBegin(GL_QUADS);
-
-			glVertex2f(x, y);
-			glVertex2f(x + 50, y);
-			glVertex2f(x + 50, y + 50);
-			glVertex2f(x, y + 50);
-
+			glVertex2i(0, 0);
+			glVertex2i(50, 0);
+			glVertex2i(50, 50);
+			glVertex2i(0, 50);
 			glEnd();
 		}
 

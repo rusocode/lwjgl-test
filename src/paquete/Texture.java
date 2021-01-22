@@ -34,8 +34,8 @@ public class Texture {
 
 	/* Una imagen, como sabra, es simplemente una matriz de colores, renderizada en dos dimensiones
 	 * (https://es.wikipedia.org/wiki/Dimensi%C3%B3n), construida por pixeles individuales. Hay varias formas de almacenar
-	 * una imagen, para este ejemplo se usara el formato RGBA ocupando 4 bytes por pixel. RGB se refiere a los canales rojo
-	 * (red), verde (green) y azul (blue), y A (alpha) se refiere a la transparencia.
+	 * una imagen, para este ejemplo se usara el formato RGBA ocupando 4 bytes por pixel. RGBA se refiere a los canales rojo
+	 * (red), verde (green), azul (blue) y A (alpha) a la transparencia.
 	 * 
 	 * Dado que una matriz de bytes puede volverse muy grande, generalmente usamos compresion como PNG o JPEG para disminuir
 	 * el tamaño del archivo final y distribuir la imagen para la web/correo electronico/etc.
@@ -80,9 +80,9 @@ public class Texture {
 
 	public Texture(URL url, int filter) throws IOException {
 		// Wrap (envoltura)
-		/* Para renderizar un objeto (ej. ladrillo), necesitamos darle a OpenGL cuatro vertices (en geometria, un vertice es
-		 * el punto donde se encuentran dos o mas elementos unidimensionales). Como puede ver, terminamos con un cuadrilatero
-		 * 2D. Cada vertice tiene una serie de atributos, que incluyen Posicion (x, y) y Coordenadas de textura (s, t). Las
+		/* Para renderizar un objeto (ej. ladrillo), necesitamos darle a OpenGL cuatro vertices (en geometria, un vertice es el
+		 * punto donde se encuentran dos o mas elementos unidimensionales). Como puede ver, terminamos con un cuadrilatero 2D.
+		 * Cada vertice tiene una serie de atributos, que incluyen Posicion (x, y) y Coordenadas de textura (s, t). Las
 		 * coordenadas de textura se definen en el espacio tangente, generalmente entre 0.0 y 1.0. Estos le dicen a OpenGL donde
 		 * tomar muestras de nuestros datos de textura.
 		 * 
