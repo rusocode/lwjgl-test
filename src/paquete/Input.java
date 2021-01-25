@@ -14,12 +14,10 @@ import java.util.Random;
 import static org.lwjgl.opengl.GL11.*;
 
 // Uso de las clases de teclado y mouse con LWJGL
-
 public class Input {
 
 	private static final List<Box> shapes = new ArrayList<Box>(16);
 	private static boolean somethingIsSelected = false;
-	private static long lastColourChange;
 
 	protected boolean running = false;
 
@@ -35,12 +33,12 @@ public class Input {
 
 	public void start() throws LWJGLException {
 
+		Display.setTitle("Input Test");
 		Display.setDisplayMode(new DisplayMode(640, 480));
-		Display.setTitle("Input Demo");
 		Display.create(); // Crea una pantalla con el modo de visualizacion y el titulo especificados
 
-		// Crea una caja en el eje de coordenadas x=15:y=20 y la agrega a la coleccion de tipo List
-		shapes.add(new Box(15, 20));
+		// Crea una caja en el eje de coordenadas especificado y la agrega a la coleccion de tipo List
+		shapes.add(new Box(10, 10));
 
 		create();
 
@@ -67,8 +65,8 @@ public class Input {
 		// Creacion del lente para la transformacion de la escena 3D a 2D en la pantalla
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		/* La razon por la que tienes que invertir getDY() es porque OpenGL esta destinado a tener el origen tambien conocido
-		 * como (0,0) en la parte inferior izquierda. */
+		/* La razon por la que tienes que invertir getDY() es porque OpenGL esta destinado a tener el origen en la parte
+		 * inferior izquierda. */
 		// Creacion del sistema de coordenadas de vertice 2D
 		// Esquina superior izquierda: glOrtho(0, 640, 480, 0, 1, -1)
 		// Esquina inferior izquierda: glOrtho(0, 640, 0, 480, 1, -1)
@@ -84,15 +82,15 @@ public class Input {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Posicion
-		System.out.println("X=" + Mouse.getX() + ":Y=" + Mouse.getY());
+		// System.out.println("X=" + Mouse.getX() + ":Y=" + Mouse.getY());
 
 		/* Keyboard.next() obtiene el proximo evento de teclado. Puede consultar que clave causo el evento utilizando
 		 * getEventKey. Para obtener el estado de esa clave, para ese evento, use getEventKeyState; finalmente use
 		 * getEventCharacter para obtener el caracter de ese evento. */
 		while (Keyboard.next()) {
 
-			// Si se pulso la tecla C y si la tecla estaba presionada getEventKeyState() o falsa si se solto, entonces...
-			if (Keyboard.isKeyDown(Keyboard.KEY_C) && Keyboard.getEventKeyState()) shapes.add(new Box(15, 15));
+			// Si se pulso la tecla C y si la tecla estaba presionada getEventKeyState() o falso si se solto, entonces...
+			if (Keyboard.isKeyDown(Keyboard.KEY_C) && Keyboard.getEventKeyState()) shapes.add(new Box(10, 10));
 
 			// Keyboard.getEventKey() == Keyboard.KEY_C <-- Otra forma de comprobar si se pulso una tecla
 
@@ -115,13 +113,6 @@ public class Input {
 			if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), Mouse.getY()) && !somethingIsSelected) {
 				somethingIsSelected = true;
 				box.selected = true;
-			}
-
-			if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), Mouse.getY()) && !somethingIsSelected) {
-				if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
-					box.randomiseColors();
-					lastColourChange = System.currentTimeMillis();
-				}
 			}
 
 			// Cuando se suelta la caja
@@ -153,6 +144,7 @@ public class Input {
 			colorGreen = randomGenerator.nextFloat();
 		}
 
+		// Si se selecciono la caja dentro sus limites
 		boolean isInBounds(int mouseX, int mouseY) {
 			return mouseX > x && mouseX < x + 50 && mouseY > y && mouseY < y + 50;
 		}
@@ -163,32 +155,19 @@ public class Input {
 			y += dy;
 		}
 
-		void randomiseColors() {
-			Random randomGenerator = new Random();
-			colorRed = randomGenerator.nextFloat();
-			colorBlue = randomGenerator.nextFloat();
-			colorGreen = randomGenerator.nextFloat();
-		}
-
 		void draw() {
 
 			glColor3f(colorRed, colorGreen, colorBlue);
 
 			/* la mayoria de los dosificadores de sprites usan dos triangulos adyacentes para representar un sprite rectangular. */
-			/* glBegin(GL_QUADS);
-			 * 
-			 * // Conjuntos de vertices que juntos forman una primitiva (triangulos), dando un cuadrado como resultado glVertex2f(x,
-			 * y); glVertex2f(x + 50, y); glVertex2f(x + 50, y + 50); glVertex2f(x, y + 50);
-			 * 
-			 * glEnd(); */
-
-			// Dibuja una linea desde la posicion 0,0 hasta la 50,50, usando dos vertices
 			glBegin(GL_QUADS);
-			glVertex2i(0, 0);
-			glVertex2i(50, 0);
-			glVertex2i(50, 50);
-			glVertex2i(0, 50);
+			// Conjuntos de vertices (puntos) que juntos forman una primitiva (triangulos), dando un cuadrado como resultado
+			glVertex2i(x, y); // Posicion del primer vertice x=0;y=0
+			glVertex2i(x + 50, y); // Posicion del segundo vertice x=x+50;y=0
+			glVertex2i(x + 50, y + 50); // Posicion del tercer vertice x=x+50;y=y+50
+			glVertex2i(x, y + 50); // Posicion del cuarto vertice x=0;y=y+50
 			glEnd();
+
 		}
 
 	}
