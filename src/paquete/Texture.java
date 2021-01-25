@@ -118,12 +118,12 @@ public class Texture {
 			ByteBuffer buf = BufferUtils.createByteBuffer(width * height * bpp); // bpp * width * height
 
 			// 1) Decodifica la imagen de tipo PNG en el buffer de bytes en formato RGBA
-			dec.decode(buf, width * bpp, PNGDecoder.Format.RGBA);
+			dec.decode(buf, width * bpp, PNGDecoder.Format.RGBA); // Nos basaremos en el ancho para renderizarlo como una imagen bidimensional
 
 			// Voltea el buffer en "modo lectura" para OpenGL
 			buf.flip();
 
-			// 2) Habilita el texturizado y genera una identificacion para que GL sepa que textura enlazar
+			// 2) Habilita el texturizado y genera una identificacion unica para que GL sepa que textura enlazar
 			glEnable(target);
 			id = glGenTextures();
 
