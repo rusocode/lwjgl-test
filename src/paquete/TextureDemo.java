@@ -75,14 +75,14 @@ public class TextureDemo {
 		img.bind(); // Enlaza la textura antes de renderizarla
 
 		glBegin(GL_QUADS);
-		glTexCoord2f(1, 1);
-		glVertex2f(50, 50);
-		glTexCoord2f(1, 0);
-		glVertex2f(50, 0);
 		glTexCoord2f(0, 0);
-		glVertex2f(0, 0);
+		glVertex2i(10, 10);
+		glTexCoord2f(1, 0);
+		glVertex2i(10 + 50, 10);
+		glTexCoord2f(1, 1);
+		glVertex2i(10 + 50, 10 + 50);
 		glTexCoord2f(0, 1);
-		glVertex2f(0, 50);
+		glVertex2i(10, 10 + 50);
 		glEnd();
 	}
 
