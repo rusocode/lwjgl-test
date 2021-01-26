@@ -1,4 +1,4 @@
-package paquete;
+package ejemplos;
 
 import static org.lwjgl.opengl.GL11.GL_CLAMP;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;

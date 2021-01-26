@@ -1,4 +1,4 @@
-package paquete;
+package ejemplos;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;

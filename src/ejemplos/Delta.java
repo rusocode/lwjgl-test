@@ -1,4 +1,4 @@
-package paquete;
+package ejemplos;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
@@ -31,7 +31,13 @@ public class Delta {
 	int x = 10, y = 10;
 	int dx = 1, dy = 1; // Representa el movimiento dinamico
 
-	// Tiempo en milisegundos
+	/* La resolucion del temporizador se define como (de los documentos LWJGL)
+	 * "el numero de tics que... el temporizador hace en un segundo". Divide el valor actual del temporizador en tics
+	 * (getTime) por la resolución del temporizador para obtener el tiempo en segundos. Como quiero el tiempo en
+	 * milisegundos, lo multiplico por 1000.
+	 * 
+	 * Sys.getTime se creo para usos como LWJGL con aspectos como la precision y el rendimiento en mente.
+	 * System.currentTimeMillis, sin embargo, no lo fue. Sin embargo, es mas sencillo. */
 	private static long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
