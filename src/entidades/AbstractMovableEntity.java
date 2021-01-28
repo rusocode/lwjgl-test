@@ -1,5 +1,7 @@
 package entidades;
 
+// Valores de entidades movibles
+
 public abstract class AbstractMovableEntity extends AbstractEntity implements MoveableEntity {
 
 	private double dx;

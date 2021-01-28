@@ -2,6 +2,8 @@ package entidades;
 
 import java.awt.Rectangle;
 
+// Valores de entidades absolutos
+
 // Clase puente para evitar sobreescribir todos los metodos de la interfaz Entity
 public abstract class AbstractEntity implements Entity {
 
@@ -66,7 +68,7 @@ public abstract class AbstractEntity implements Entity {
 
 	@Override
 	public boolean intersects(Entity other) {
-		
+
 		// Establece los limites para la caja creada en la x, y, ancho y alto especificados
 		hitbox.setBounds((int) x, (int) y, (int) width, (int) height);
 

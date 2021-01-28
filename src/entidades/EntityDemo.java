@@ -56,10 +56,8 @@ public class EntityDemo {
 		@Override
 		public void update(int delta) {
 			// TODO Auto-generated method stub
-			
-		}
 
-	
+		}
 
 	}
 
@@ -92,7 +90,7 @@ public class EntityDemo {
 			render(box, point);
 
 			Display.update();
-			Display.sync(60);
+			Display.sync(120);
 
 		}
 
@@ -120,10 +118,37 @@ public class EntityDemo {
 		point.update(delta);
 
 		// Si hay colision entre la caja y el punto, entonces...
-		if (box.intersects(point)) box.setDX(0.1); // Mueva la caja horizontalmente a una velocidad reducida a 9 veces
+		if (box.intersects(point)) box.setDX(0.2); // Mueva la caja horizontalmente a una velocidad reducida a 9 veces
+
+		// Cuando la caja llego al limite del ancho de la ventana, vuelve a su posicion inicial
+		if (box.getX() + box.getWidth() >= 640) {
+
+			rebotarHaciaAtras(box);
+			// setInicio(box);
+		}
+
+		if (box.getX() <= 0) {
+			rebotarHaciaAdelante(box);
+		}
 
 		point.draw();
 		box.draw(); // Rellena la caja por asi decirlo
 	}
 
+	private void setInicio(MoveableEntity box) {
+		// Establece los valores en el eje de coordenadas del juego
+		box.setX(100);
+		box.setY(100);
+
+		// Nunca se mueve ya que DX esta en 0
+		box.setDX(0);
+	}
+
+	private void rebotarHaciaAtras(MoveableEntity box) {
+		box.setDX(-0.2);
+	}
+
+	private void rebotarHaciaAdelante(MoveableEntity box) {
+		box.setDX(0.2);
+	}
 }
