@@ -7,10 +7,12 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
 
 	public AbstractMovableEntity(double x, double y, double width, double height) {
 		super(x, y, width, height);
+		// Por defecto la caja y el punto permanecen quietos
 		this.dx = 0;
 		this.dy = 0;
 	}
 
+	// Calcula la velocidad de una entidad
 	@Override
 	public void update(int delta) {
 		this.x += delta * dx;

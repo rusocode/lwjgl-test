@@ -1,13 +1,14 @@
 package entidades;
 
+// X e Y movibles
 public interface MoveableEntity extends Entity {
 
-	public double getDX();
+	double getDX();
 
-	public double getDY();
+	double getDY();
 
-	public void setDX(double dx);
+	void setDX(double dx);
 
-	public void setDY(double dy);
+	void setDY(double dy);
 
 }
