@@ -117,22 +117,22 @@ public class EntityDemo {
 		box.update(delta);
 		point.update(delta);
 
-		// Si hay colision entre la caja y el punto, entonces...
+		// Si hay colision entre el punto y la caja, entonces...
 		if (box.intersects(point)) box.setDX(0.2); // Mueva la caja horizontalmente a una velocidad reducida a 9 veces
 
-		// Cuando la caja llego al limite del ancho de la ventana, vuelve a su posicion inicial
-		if (box.getX() + box.getWidth() >= 640) {
+		// Si la caja llego a los limites del ancho de la ventana, entonces...
+		calcularLimites(box);
 
-			rebotarHaciaAtras(box);
-			// setInicio(box);
-		}
-
-		if (box.getX() <= 0) {
-			rebotarHaciaAdelante(box);
-		}
-
-		point.draw();
+		// Lo comento para que no se vea el punto
+		// point.draw();
 		box.draw(); // Rellena la caja por asi decirlo
+	}
+
+	private void calcularLimites(MoveableEntity box) {
+		// Si llego al final (640) rebota hacia atras
+		if (box.getX() + box.getWidth() >= 640) box.setDX(-0.2);
+		// Si llego al principio (0) rebota hacia adelante
+		if (box.getX() <= 0) box.setDX(0.2);
 	}
 
 	private void setInicio(MoveableEntity box) {
@@ -144,11 +144,4 @@ public class EntityDemo {
 		box.setDX(0);
 	}
 
-	private void rebotarHaciaAtras(MoveableEntity box) {
-		box.setDX(-0.2);
-	}
-
-	private void rebotarHaciaAdelante(MoveableEntity box) {
-		box.setDX(0.2);
-	}
 }
