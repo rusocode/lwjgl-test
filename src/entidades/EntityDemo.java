@@ -108,7 +108,7 @@ public class EntityDemo {
 	private void render(MoveableEntity box, Entity point) {
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Estable la posicion del point en la ubicacion del mouse
+		// Establece la posicion del point en la ubicacion del mouse
 		point.setLocation(Mouse.getX(), Mouse.getY() - 1); // -1 ?
 
 		// Calcula el delta
@@ -136,11 +136,8 @@ public class EntityDemo {
 	}
 
 	private void setInicio(MoveableEntity box) {
-		// Establece los valores en el eje de coordenadas del juego
-		box.setX(100);
-		box.setY(100);
-
-		// Nunca se mueve ya que DX esta en 0
+		// Establece los valores en el eje de coordenadas y deja quieta a la entidad (cuadrado)
+		box.setLocation(100, 100);
 		box.setDX(0);
 	}
 

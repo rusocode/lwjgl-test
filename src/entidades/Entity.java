@@ -25,6 +25,6 @@ public interface Entity {
 
 	double getWidth();
 
-	boolean intersects(Entity other); // Colision
+	boolean intersects(Entity other);
 
 }
