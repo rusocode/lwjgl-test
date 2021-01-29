@@ -7,10 +7,10 @@ import java.awt.Rectangle;
 // Clase puente para evitar sobreescribir todos los metodos de la interfaz Entity
 public abstract class AbstractEntity implements Entity {
 
-	double x;
-	double y;
-	double width;
-	double height;
+	protected double x;
+	protected double y;
+	protected double width;
+	protected double height;
 	private final Rectangle hitbox = new Rectangle();
 
 	public AbstractEntity(double x, double y, double width, double height) {
