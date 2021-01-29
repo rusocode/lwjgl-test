@@ -38,11 +38,11 @@ public class Delta {
 	 * 
 	 * Sys.getTime se creo para usos como LWJGL con aspectos como la precision y el rendimiento en mente.
 	 * System.currentTimeMillis, sin embargo, no lo fue. Sin embargo, es mas sencillo. */
-	public static long getTime() {
+	private static long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
-	public static double getDelta() {
+	private static double getDelta() {
 		long currentTime = getTime();
 		// Diferencia entre el tiempo actual y el ultimo fotograma
 		double delta = (double) (currentTime - lastFrame);
