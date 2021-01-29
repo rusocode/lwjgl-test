@@ -9,16 +9,14 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 import entidades.AbstractMovableEntity;
-import ejemplos.Delta;
 
 public class Pong {
 
+	// Atributos pertenecientes a la clase
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
-	private static boolean isRunning = true;
 	private static Ball ball;
 	private static Bat bat;
-
 	private static long lastFrame;
 
 	public static void main(String[] args) {
@@ -38,16 +36,17 @@ public class Pong {
 		setUpEntities();
 		setUpTimer();
 
-		while (isRunning) {
+		while (!Display.isCloseRequested()) {
 
-			render();
-			logic(getDelta());
+			// Esto sucede tan rapido que da un efecto de movimiento
+			update(Delta.getDelta()); // Actualiza la nueva posicion
+			render(); // Borra la bola de la posicion anterior y la dibuja en la nueva posicion
+
+			// Controla las entradas del usuario
 			input();
 
 			Display.update();
-			Display.sync(60);
-
-			if (Display.isCloseRequested()) isRunning = false;
+			Display.sync(120);
 
 		}
 
@@ -75,45 +74,57 @@ public class Pong {
 	}
 
 	private static void setUpEntities() {
-		bat = new Bat(10, HEIGHT / 2 - 80 / 2, 10, 80);
+
+		bat = new Bat(10, HEIGHT / 2 - 80 / 2, 10, 80); // Ubica la barra en el centro del eje y
+
+		// Ubica la bola en el centro de la ventana y la mueve hacia atras
 		ball = new Ball(WIDTH / 2 - 10 / 2, HEIGHT / 2 - 10 / 2, 10, 10);
-		ball.setDX(-.1);
+		ball.setDX(-0.1);
 	}
 
 	private static void setUpTimer() {
-		lastFrame = getTime();
+		lastFrame = Delta.getTime();
 	}
 
-	private static long getTime() {
-		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
-	}
+	private void update(int delta) {
 
-	private static int getDelta() {
-		long currentTime = getTime();
-		int delta = (int) (currentTime - lastFrame);
-		lastFrame = getTime();
-		return delta;
+		ball.update(delta);
+		bat.update(delta);
+
+		if (ball.getX() <= bat.getX() + bat.getWidth() && ball.getX() >= bat.getX() && ball.getY() >= bat.getY()
+				&& ball.getY() <= bat.getY() + bat.getHeight()) {
+			ball.setDX(0.3);
+		}
+
 	}
 
 	private void render() {
+
 		glClear(GL_COLOR_BUFFER_BIT);
+
 		ball.draw();
 		bat.draw();
 	}
 
 	private void input() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) bat.setDY(.2);
-		else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) bat.setDY(-.2);
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) bat.setDY(0.2);
+		else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) bat.setDY(-0.2);
 		else bat.setDY(0);
 	}
 
-	private void logic(int delta) {
-		ball.update(delta);
-		bat.update(delta);
-		if (ball.getX() <= bat.getX() + bat.getWidth() && ball.getX() >= bat.getX() && ball.getY() >= bat.getY()
-				&& ball.getY() <= bat.getY() + bat.getHeight()) {
-			ball.setDX(0.3);
+	private static class Delta {
+
+		private static long getTime() {
+			return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 		}
+
+		private static int getDelta() {
+			long currentTime = getTime();
+			int delta = (int) (currentTime - lastFrame);
+			lastFrame = getTime();
+			return delta;
+		}
+
 	}
 
 	private static class Bat extends AbstractMovableEntity {
