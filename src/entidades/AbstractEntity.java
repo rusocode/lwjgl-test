@@ -2,7 +2,7 @@ package entidades;
 
 import java.awt.Rectangle;
 
-// Valores de entidades absolutos
+// Valores de entidades absolutas
 
 // Clase puente para evitar sobreescribir todos los metodos de la interfaz Entity
 public abstract class AbstractEntity implements Entity {
