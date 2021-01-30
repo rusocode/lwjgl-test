@@ -15,8 +15,15 @@ public class Pong {
 	// Atributos pertenecientes a la clase
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
-	private static Ball ball;
+
 	private static Bat bat;
+	private static final int BAT_WIDTH = 10;
+	private static final int BAT_HEIGHT = 80;
+
+	private static Ball ball;
+	private static final int BALL_WIDTH = 10;
+	private static final int BALL_HEIGHT = 10;
+
 	private static long lastFrame;
 
 	public static void main(String[] args) {
@@ -86,11 +93,12 @@ public class Pong {
 
 	private static void setUpEntities() {
 
-		bat = new Bat(10, HEIGHT / 2 - 80 / 2, 10, 80); // Ubica la barra en el centro del eje y
+		bat = new Bat(10, HEIGHT / 2 - BAT_HEIGHT / 2, BAT_WIDTH, BAT_HEIGHT); // Ubica la barra en el centro del eje y
 
 		// Ubica la bola en el centro de la ventana y la mueve hacia atras
-		ball = new Ball(WIDTH / 2 - 10 / 2, HEIGHT / 2 - 10 / 2, 10, 10);
+		ball = new Ball(WIDTH / 2 - BALL_WIDTH / 2, HEIGHT / 2 - BALL_HEIGHT / 2, BALL_WIDTH, BALL_HEIGHT);
 		ball.setDX(-0.1);
+
 	}
 
 	private static void setUpTimer() {
@@ -111,6 +119,8 @@ public class Pong {
 
 		// if (ball.intersects(bat)) ball.setDX(0.3);
 
+		if (ball.getX() + ball.getWidth() >= WIDTH) ball.setDX(-0.3);
+
 	}
 
 	private void render() {
@@ -122,9 +132,17 @@ public class Pong {
 	}
 
 	private void input() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) bat.setDY(0.2);
-		else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) bat.setDY(-0.2);
-		else bat.setDY(0);
+		// Si se presiono te tecla de arriba y la barra no llego al alto de la ventana, entonces...
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP) && bat.getY() + bat.getHeight() <= HEIGHT) {
+			bat.setDY(0.2);
+
+			if (ball.intersects(bat)) {
+				ball.setDX(0.3);
+				ball.setDY(0.3);
+			}
+
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) && bat.getY() >= 0) bat.setDY(-0.2);
+		else bat.setDY(0); // Para que la barra quede en su lugar
 	}
 
 	/* https://www.parallelcube.com/es/2017/10/25/por-que-necesitamos-utilizar-delta-time/#:~:text=Delta%20time%20(%CE%94t)%
