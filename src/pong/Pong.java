@@ -46,7 +46,18 @@ public class Pong {
 			input();
 
 			Display.update();
-			Display.sync(120);
+			// Mientras mas bajo sean los FPS mayor sera el delta
+			Display.sync(60);
+
+			/* Sin Delta */
+			// El tiempo que tardo la bola en colisionar a 60 fps fue de 5 segundos
+			// El tiempo que tardo la bola en colisionar a 30 fps fue de 10 segundos
+			/* Con Delta */
+			// El tiempo que tardo la bola en colisionar a 60 fps fue de 5 segundos
+			// El tiempo que tardo la bola en colisionar a 30 fps fue de 5 segundos
+			/* En conclusion, con valores de FPS menores el Delta se incrementa, los desplazamientos en estos frames son mayores
+			 * pero tenemos menos frames, por lo tanto el resultado de la suma final es el mismo. Ahora podemos decir que el juego
+			 * es framerate independente. */
 
 		}
 
@@ -88,6 +99,8 @@ public class Pong {
 
 	private void update(int delta) {
 
+		// System.out.println(delta);
+
 		ball.update(delta);
 		bat.update(delta);
 
@@ -112,6 +125,8 @@ public class Pong {
 		else bat.setDY(0);
 	}
 
+	/* https://www.parallelcube.com/es/2017/10/25/por-que-necesitamos-utilizar-delta-time/#:~:text=Delta%20time%20(%CE%94t)%
+	 * 20es%20el,el%20siguiente%20diagrama%20de%20flujo.&text=Cuando%20el%20juego%20termina%20el%20programa%20finaliza. */
 	private static class Delta {
 
 		private static long getTime() {

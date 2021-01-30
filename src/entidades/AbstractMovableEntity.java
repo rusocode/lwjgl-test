@@ -17,8 +17,15 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
 	// Calcula la velocidad de una entidad
 	@Override
 	public void update(int delta) {
-		this.x += delta * dx;
-		this.y += delta * dy;
+		/* Formula para calcular el desplazamiento
+		 * 
+		 * x = desplazamiento
+		 * 
+		 * dx = velocidad
+		 * 
+		 * delta = tiempo */
+		this.x += dx * delta;
+		this.y += dy * delta;
 	}
 
 	public double getDX() {
