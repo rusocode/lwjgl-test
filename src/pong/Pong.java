@@ -109,6 +109,8 @@ public class Pong {
 			ball.setDX(0.3);
 		}
 
+		// if (ball.intersects(bat)) ball.setDX(0.3);
+
 	}
 
 	private void render() {
