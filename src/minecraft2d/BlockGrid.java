@@ -18,7 +18,7 @@ class BlockGrid {
 	// Matriz de bloques
 	private Block[][] blocks = new Block[BLOCKS_WIDTH][BLOCKS_HEIGHT];
 
-	// Inicializa en cada posicion de la matriz un nuevo bloque de aire con su respectiva posicion
+	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
 		for (int x = 0; x < BLOCKS_WIDTH; x++) {
 			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
@@ -27,8 +27,8 @@ class BlockGrid {
 		}
 	}
 
-	public void setAt(int x, int y, BlockType b) {
-		blocks[x][y] = new Block(b, x * BLOCK_SIZE, y * BLOCK_SIZE);
+	public void setAt(BlockType type, int x, int y) {
+		blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE); // FIXME hace falta crear un nuevo bloque o lo reemplazo?
 	}
 
 	public Block getAt(int x, int y) {

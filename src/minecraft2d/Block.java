@@ -8,16 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static minecraft2d.World.BLOCK_SIZE;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public final class Block {
 
-	// Por defecto el tipo de bloque es de aire
-	private BlockType type = BlockType.AIR;
-
-	// Ubicacion del bloque
+	private BlockType type;
 	private float x;
 	private float y;
 
@@ -60,13 +55,16 @@ public final class Block {
 
 		// Habilita el texturizado 2D
 		glEnable(GL_TEXTURE_2D);
-		// Enlaza la textura pasandole el texturizado y la identificacion unica para que GL sepa que textura enlazar
+		// Enlaza la textura pasandole el texturizado y el ID de cada textura para que GL sepa que textura enlazar
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 
-		glPushMatrix();
+		/* glPushMatrix() y glPopMatrix() funcionan como guardar y cargar la matriz actual. */
+		glPushMatrix(); // Se usa solo para la pila de matrices
+
+		// Traslada la posicion del bloque
 		glTranslatef(x, y, 0);
 
-		// Al trabajar con texturas se necesitan pasarle a GL las coordenadas de texturas, ademas de los vertices
+		// Si se trabaja con texturas, es necesario pasarle a GL las coordenadas de texturas (ademas de los vertices)
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2f(0, 0);

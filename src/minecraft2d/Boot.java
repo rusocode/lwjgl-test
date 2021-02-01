@@ -39,7 +39,8 @@ public class Boot {
 		setUpDisplay();
 		setUpOpenGL();
 
-		grid = new BlockGrid();
+		grid = new BlockGrid(); // FIXME pasar el tipo de bloque
+		grid.setAt(BlockType.STONE, 0, 0);
 
 		while (!Display.isCloseRequested()) {
 
@@ -73,7 +74,7 @@ public class Boot {
 	private void setUpOpenGL() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 480, 0, 1, -1); // FIXME cambiar
+		glOrtho(0, 640, 0, 480, 1, -1); // FIXME cambiar
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
@@ -113,17 +114,21 @@ public class Boot {
 	}
 
 	private static void input() {
+		// Cuando el mouse esta habilitado o se selecciono una caja, entonces...
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
+			
 			mouseEnabled = true;
 			int mousex = Mouse.getX();
-			int mousey = 480 - Mouse.getY() - 1;
+			int mousey = Mouse.getY() - 1;
 			boolean mouseClicked = Mouse.isButtonDown(0);
 			selector_x = Math.round(mousex / World.BLOCK_SIZE);
 			selector_y = Math.round(mousey / World.BLOCK_SIZE);
+			
 			if (mouseClicked) {
-				grid.setAt(selector_x, selector_y, selection);
+				grid.setAt(selection, selector_x, selector_y);
 			}
 		}
+		
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
 				mouseEnabled = false;
