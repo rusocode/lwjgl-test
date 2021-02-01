@@ -14,15 +14,16 @@ import static org.lwjgl.opengl.GL11.*;
 
 public final class Block {
 
-	// Por defecto queda seleccionado el bloque de aire
+	// Por defecto el tipo de bloque es de aire
 	private BlockType type = BlockType.AIR;
+
 	// Ubicacion del bloque
 	private float x;
 	private float y;
 
 	private Texture texture;
-	private int id;
 
+	// Crea un bloque y decodifica la imagen de tipo PNG (en "location") para trabajarla como textura
 	public Block(BlockType type, float x, float y) {
 		this.type = type;
 		this.x = x;
@@ -54,6 +55,7 @@ public final class Block {
 		texture.bind();
 	}
 
+	// Rellana cada posicion de la matriz con la textura especificada
 	public void draw() {
 
 		// Habilita el texturizado 2D
