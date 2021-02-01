@@ -73,7 +73,7 @@ public class Boot {
 	private void setUpOpenGL() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 480, 0, 1, -1);
+		glOrtho(0, 640, 480, 0, 1, -1); // FIXME cambiar
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */

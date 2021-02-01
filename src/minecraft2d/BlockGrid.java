@@ -76,7 +76,7 @@ class BlockGrid {
 		}
 	}
 
-	// Rellana (crea la imagen) los bloques de cada posicion
+	// Dibuja los bloques de cada posicion
 	public void draw() {
 		for (int x = 0; x < BLOCKS_WIDTH - 1; x++) { // Hace falta el -1?
 			for (int y = 0; y < BLOCKS_HEIGHT - 1; y++) {

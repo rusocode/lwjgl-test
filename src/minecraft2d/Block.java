@@ -21,6 +21,7 @@ public final class Block {
 	private float y;
 
 	private Texture texture;
+	private int id;
 
 	public Block(BlockType type, float x, float y) {
 		this.type = type;
@@ -47,17 +48,23 @@ public final class Block {
 		return y;
 	}
 
+	// ?
 	public void bind() {
+		// Enlaza la textura antes de renderizarla
 		texture.bind();
 	}
 
 	public void draw() {
-		
+
+		// Habilita el texturizado 2D
+		glEnable(GL_TEXTURE_2D);
+		// Enlaza la textura pasandole el texturizado y la identificacion unica para que GL sepa que textura enlazar
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+
 		glPushMatrix();
 		glTranslatef(x, y, 0);
-		
-		// Crea un bloque 
+
+		// Al trabajar con texturas se necesitan pasarle a GL las coordenadas de texturas, ademas de los vertices
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2f(0, 0);
@@ -68,7 +75,7 @@ public final class Block {
 		glTexCoord2f(0, 1);
 		glVertex2f(0, World.BLOCK_SIZE);
 		glEnd();
-		
+
 		glPopMatrix();
 	}
 
