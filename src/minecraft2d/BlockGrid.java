@@ -27,7 +27,7 @@ class BlockGrid {
 		}
 	}
 
-	public void setAt(BlockType type, int x, int y) {
+	public void setAt(int x, int y, BlockType type) {
 		blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE); // FIXME hace falta crear un nuevo bloque o lo reemplazo?
 	}
 

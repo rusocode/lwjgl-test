@@ -18,6 +18,7 @@ public class Boot {
 	private static final int HEIGHT = 480;
 
 	private static BlockGrid grid;
+
 	private static BlockType selection = BlockType.AIR;
 	private static int selector_x = 0, selector_y = 0;
 	private static boolean mouseEnabled = true;
@@ -40,7 +41,7 @@ public class Boot {
 		setUpOpenGL();
 
 		grid = new BlockGrid(); // FIXME pasar el tipo de bloque
-		grid.setAt(BlockType.STONE, 0, 0);
+		// grid.setAt(0, 0, BlockType.STONE);
 
 		while (!Display.isCloseRequested()) {
 
@@ -48,7 +49,7 @@ public class Boot {
 			render();
 			input();
 
-			drawSelectionBox();
+			// drawSelectionBox();
 
 			Display.update();
 			Display.sync(60);
@@ -114,72 +115,21 @@ public class Boot {
 	}
 
 	private static void input() {
-		// Cuando el mouse esta habilitado o se selecciono una caja, entonces...
-		if (mouseEnabled || Mouse.isButtonDown(0)) {
-			
-			mouseEnabled = true;
-			int mousex = Mouse.getX();
-			int mousey = Mouse.getY() - 1;
-			boolean mouseClicked = Mouse.isButtonDown(0);
-			selector_x = Math.round(mousex / World.BLOCK_SIZE);
-			selector_y = Math.round(mousey / World.BLOCK_SIZE);
-			
-			if (mouseClicked) {
-				grid.setAt(selection, selector_x, selector_y);
-			}
+
+		int mousex = Mouse.getX();
+		int mousey = Mouse.getY();
+
+		if (Mouse.isButtonDown(0)) {
+
+			int grid_x = Math.round(mousex / World.BLOCK_SIZE);
+			int grid_y = Math.round(mousey / World.BLOCK_SIZE);
+
+			// System.out.println(grid_x + ", " + grid_y);
+
+			grid.setAt(grid_x, grid_y, BlockType.STONE);
+
 		}
-		
-		while (Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
-				mouseEnabled = false;
-				if (!(selector_x + 1 > World.BLOCKS_WIDTH - 2)) {
-					selector_x += 1;
-				}
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
-				mouseEnabled = false;
-				if (!(selector_x - 1 < 0)) {
-					selector_x -= 1;
-				}
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_UP && Keyboard.getEventKeyState()) {
-				mouseEnabled = false;
-				if (!(selector_y - 1 < 0)) {
-					selector_y -= 1;
-				}
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_DOWN && Keyboard.getEventKeyState()) {
-				mouseEnabled = false;
-				if (!(selector_y + 1 > World.BLOCKS_HEIGHT - 2)) {
-					selector_y += 1;
-				}
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-				grid.save(new File("save.xml"));
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_L) {
-				grid.load(new File("save.xml"));
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_1) {
-				selection = BlockType.STONE;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_2) {
-				selection = BlockType.DIRT;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_3) {
-				selection = BlockType.GRASS;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_4) {
-				selection = BlockType.AIR;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_C) {
-				grid.clear();
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-				Display.destroy();
-				System.exit(0);
-			}
-		}
+
 	}
 
 }
