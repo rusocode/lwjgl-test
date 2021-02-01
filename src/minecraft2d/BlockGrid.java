@@ -35,41 +35,63 @@ class BlockGrid {
 		return blocks[x][y];
 	}
 
-	public void load(File loadFile) {
-		try {
-			SAXBuilder builder = new SAXBuilder();
-			Document document = builder.build(loadFile);
-			Element root = document.getRootElement();
-			for (Object block : root.getChildren()) {
-				Element e = (Element) block;
-				int x = Integer.parseInt(e.getAttributeValue("x"));
-				int y = Integer.parseInt(e.getAttributeValue("y"));
-				blocks[x][y] = new Block(BlockType.valueOf(e.getAttributeValue("type")), x * BLOCK_SIZE, y * BLOCK_SIZE);
+	// Guarda el estado del juego en formato xml
+	public void save(File file) {
+
+		Document document = new Document();
+		Element root = new Element("blocks"); // Etiqueta raiz (bloques)
+		document.setRootElement(root); // Establece el elemento raiz
+
+		for (int x = 0; x < BLOCKS_WIDTH; x++) {
+			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
+
+				Element block = new Element("block"); // Segunda etiqueta (bloque)
+
+				// Establece los valores para los atributos (x, y, type) en la etiqueta bloque
+				block.setAttribute("x", String.valueOf((int) (blocks[x][y].getX() / BLOCK_SIZE)));
+				block.setAttribute("y", String.valueOf((int) (blocks[x][y].getY() / BLOCK_SIZE)));
+				block.setAttribute("type", String.valueOf(blocks[x][y].getType()));
+
+				// Agrega la etiqueta bloque a la etiqueta bloques
+				root.addContent(block);
 			}
-		} catch (JDOMException e) {
+		}
+
+		XMLOutputter xmlOutputter = new XMLOutputter();
+
+		try {
+			// Crea el archivo xml en la carpeta del proyecto
+			xmlOutputter.output(document, new FileOutputStream(file));
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void save(File saveFile) {
-		Document document = new Document();
-		Element root = new Element("blocks");
-		document.setRootElement(root);
-		for (int x = 0; x < BLOCKS_WIDTH; x++) {
-			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
-				Element block = new Element("block");
-				block.setAttribute("x", String.valueOf((int) (blocks[x][y].getX() / BLOCK_SIZE)));
-				block.setAttribute("y", String.valueOf((int) (blocks[x][y].getY() / BLOCK_SIZE)));
-				block.setAttribute("type", String.valueOf(blocks[x][y].getType()));
-				root.addContent(block);
-			}
-		}
-		XMLOutputter output = new XMLOutputter();
+	// Carga el estado del juego
+	public void load(File file) {
+
 		try {
-			output.output(document, new FileOutputStream(saveFile));
-		} catch (FileNotFoundException e) {
+
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(file);
+			Element root = document.getRootElement();
+
+			for (Object block : root.getChildren()) { // Convierte el tipo de datos Element a Object
+
+				// Convierte el tipo de datos Object a Element (raro)
+				Element e = (Element) block;
+
+				// Crea el bloque con los valores obtenidos del xml
+				int x = Integer.parseInt(e.getAttributeValue("x"));
+				int y = Integer.parseInt(e.getAttributeValue("y"));
+
+				blocks[x][y] = new Block(BlockType.valueOf(e.getAttributeValue("type")), x * BLOCK_SIZE, y * BLOCK_SIZE);
+
+			}
+
+		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();

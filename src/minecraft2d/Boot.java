@@ -130,6 +130,11 @@ public class Boot {
 
 		}
 
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
+			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
+		}
+
 	}
 
 }
