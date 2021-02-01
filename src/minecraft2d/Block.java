@@ -18,7 +18,7 @@ public final class Block {
 
 	private Texture texture;
 
-	// Crea un bloque y decodifica la imagen de tipo PNG (en "location") para trabajarla como textura
+	// Crea un bloque y decodifica la imagen de tipo PNG (en "location") para trabajarla como una textura
 	public Block(BlockType type, float x, float y) {
 		this.type = type;
 		this.x = x;
@@ -44,10 +44,9 @@ public final class Block {
 		return y;
 	}
 
-	// ?
+	// FIXME este metodo no se usa
 	public void bind() {
-		// Enlaza la textura antes de renderizarla
-		texture.bind();
+		texture.bind(); // Enlaza la textura antes de renderizarla
 	}
 
 	// Rellana cada posicion de la matriz con la textura especificada
@@ -55,16 +54,17 @@ public final class Block {
 
 		// Habilita el texturizado 2D
 		glEnable(GL_TEXTURE_2D);
+
 		// Enlaza la textura pasandole el texturizado y el ID de cada textura para que GL sepa que textura enlazar
 		glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
 
-		/* glPushMatrix() y glPopMatrix() funcionan como guardar y cargar la matriz actual. */
-		glPushMatrix(); // Se usa solo para la pila de matrices
+		// glPushMatrix() y glPopMatrix() se usan para guardar y cargar la matriz actual (pila de matrices)
+		glPushMatrix();
 
-		// Traslada la posicion del bloque
+		// Aplica un desplazamiento a todas las invocaciones posteriores del metodo glVertex
 		glTranslatef(x, y, 0);
 
-		// Si se trabaja con texturas, es necesario pasarle a GL las coordenadas de texturas (ademas de los vertices)
+		// Es obligatorio pasarle a GL las coordenadas de texturas si se trabaja con estas
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2f(0, 0);

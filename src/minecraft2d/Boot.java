@@ -75,9 +75,8 @@ public class Boot {
 	private void setUpOpenGL() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 0, 480, 1, -1); // FIXME cambiar
+		glOrtho(0, 640, 0, 480, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_TEXTURE_2D);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
 	}
 
@@ -86,6 +85,7 @@ public class Boot {
 	}
 
 	private void render() {
+		
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		grid.draw();

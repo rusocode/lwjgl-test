@@ -48,8 +48,8 @@ class BlockGrid {
 				Element block = new Element("block"); // Segunda etiqueta (bloque)
 
 				// Establece los valores para los atributos (x, y, type) en la etiqueta bloque
-				block.setAttribute("x", String.valueOf((int) (blocks[x][y].getX() / BLOCK_SIZE)));
-				block.setAttribute("y", String.valueOf((int) (blocks[x][y].getY() / BLOCK_SIZE)));
+				block.setAttribute("x", String.valueOf(x));
+				block.setAttribute("y", String.valueOf(y));
 				block.setAttribute("type", String.valueOf(blocks[x][y].getType()));
 
 				// Agrega la etiqueta bloque a la etiqueta bloques
