@@ -19,7 +19,7 @@ public class Boot {
 
 	private static BlockGrid grid;
 
-	private static BlockType selection = BlockType.AIR;
+	private static BlockType selection = BlockType.AIR; // Bloque de aire por defecto
 	private static int selector_x = 0, selector_y = 0;
 	private static boolean mouseEnabled = true;
 
@@ -40,8 +40,7 @@ public class Boot {
 		setUpDisplay();
 		setUpOpenGL();
 
-		grid = new BlockGrid(); // FIXME pasar el tipo de bloque
-		// grid.setAt(0, 0, BlockType.STONE);
+		grid = new BlockGrid();
 
 		while (!Display.isCloseRequested()) {
 
@@ -75,7 +74,8 @@ public class Boot {
 	private void setUpOpenGL() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 0, 480, 1, -1);
+		// Si cambio el origen a la esquina inferior izquierda las texturas se veran al revez
+		glOrtho(0, 640, 480, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
 	}
@@ -85,7 +85,7 @@ public class Boot {
 	}
 
 	private void render() {
-		
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		grid.draw();
@@ -117,7 +117,7 @@ public class Boot {
 	private static void input() {
 
 		int mousex = Mouse.getX();
-		int mousey = Mouse.getY();
+		int mousey = 480 - Mouse.getY() - 1; // -1 ?
 
 		if (Mouse.isButtonDown(0)) {
 
@@ -126,13 +126,17 @@ public class Boot {
 
 			// System.out.println(grid_x + ", " + grid_y);
 
-			grid.setAt(grid_x, grid_y, BlockType.STONE);
+			grid.setAt(selection, grid_x, grid_y);
 
 		}
 
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
 			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
+			if (Keyboard.getEventKey() == Keyboard.KEY_1) selection = BlockType.AIR;
+			if (Keyboard.getEventKey() == Keyboard.KEY_2) selection = BlockType.GRASS;
+			if (Keyboard.getEventKey() == Keyboard.KEY_3) selection = BlockType.DIRT;
+			if (Keyboard.getEventKey() == Keyboard.KEY_4) selection = BlockType.STONE;
 		}
 
 	}

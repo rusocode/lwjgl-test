@@ -66,7 +66,7 @@ public class Input {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		/* La razon por la que tienes que invertir getDY() es porque OpenGL esta destinado a tener el origen en la parte
-		 * inferior izquierda. */
+		 * superior izquierda. */
 		// Creacion del sistema de coordenadas de vertice 2D
 		// Esquina superior izquierda: glOrtho(0, 640, 480, 0, 1, -1)
 		// Esquina inferior izquierda: glOrtho(0, 640, 0, 480, 1, -1)
