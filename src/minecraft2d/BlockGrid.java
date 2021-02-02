@@ -16,12 +16,12 @@ import static minecraft2d.World.*;
 class BlockGrid {
 
 	// Matriz de bloques
-	private Block[][] blocks = new Block[BLOCKS_WIDTH][BLOCKS_HEIGHT];
+	private Block[][] blocks = new Block[COLUMNAS][FILAS];
 
 	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
-		for (int x = 0; x < BLOCKS_WIDTH; x++) {
-			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
+		for (int x = 0; x < COLUMNAS; x++) {
+			for (int y = 0; y < FILAS; y++) {
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}
@@ -42,8 +42,8 @@ class BlockGrid {
 		Element root = new Element("blocks"); // Etiqueta raiz (bloques)
 		document.setRootElement(root); // Establece el elemento raiz
 
-		for (int x = 0; x < BLOCKS_WIDTH; x++) {
-			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
+		for (int x = 0; x < COLUMNAS; x++) {
+			for (int y = 0; y < FILAS; y++) {
 
 				Element block = new Element("block"); // Segunda etiqueta (bloque)
 
@@ -100,16 +100,16 @@ class BlockGrid {
 
 	// Dibuja los bloques de cada posicion
 	public void draw() {
-		for (int x = 0; x < BLOCKS_WIDTH - 1; x++) { // Hace falta el -1?
-			for (int y = 0; y < BLOCKS_HEIGHT - 1; y++) {
+		for (int x = 0; x < COLUMNAS; x++) {
+			for (int y = 0; y < FILAS; y++) {
 				blocks[x][y].draw();
 			}
 		}
 	}
 
 	public void clear() {
-		for (int x = 0; x < BLOCKS_WIDTH; x++) {
-			for (int y = 0; y < BLOCKS_HEIGHT; y++) {
+		for (int x = 0; x < COLUMNAS; x++) {
+			for (int y = 0; y < FILAS; y++) {
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}
