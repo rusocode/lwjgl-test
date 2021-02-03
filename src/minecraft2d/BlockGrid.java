@@ -24,7 +24,9 @@ class BlockGrid {
 	// https://www.youtube.com/watch?v=9tBxJoQF74E
 	/* Necesitamos un array bidimensional para poder trabajar con las columnas y filas dinamicas de la ventana del juego, ya
 	 * que si el usuario redimensiona la ventana, entonces estos valores tienen que cambiar para poder evitar errores. */
-	private ArrayList<Block> bloques = new ArrayList<>();
+	private ArrayList<ArrayList<Block>> bloques = new ArrayList<>();
+
+	private ArrayList<Block> bloque = new ArrayList<>();
 
 	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
@@ -32,11 +34,15 @@ class BlockGrid {
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
 
-				bloques.add(new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE));
+				bloque.add(new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE));
 
 			}
 
 		}
+		
+		bloques.add(bloque);
+		
+		// System.out.println(bloques);
 
 		/* Una vez creada la matriz, no se pueden cambiar sus limites. */
 		/* blocks = new Block[columnas][filas];
@@ -48,9 +54,10 @@ class BlockGrid {
 		 * BLOCK_SIZE, y * BLOCK_SIZE); } } */
 	}
 
-	// Como obtengo el indice x e y del array? (bloques.get(x).get(y) ?) 
+	// Como obtengo el indice x e y del array? (bloques.get(x).get(y) ?)
 	public void setAt(BlockType type, int x, int y) {
-		blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE); // FIXME hace falta crear un nuevo bloque o lo reemplazo?
+		// blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE); // FIXME hace falta crear un nuevo bloque o lo reemplazo?
+	
 	}
 
 	public Block getAt(int x, int y) {
@@ -122,16 +129,20 @@ class BlockGrid {
 
 	// Dibuja los bloques de cada posicion
 	public void draw() {
-		System.out.println(columnas);
-		for (int x = 0; x < columnas; x++) {
+
+		 /* for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-				
+
 				blocks[x][y].draw();
 			}
+		} */
+		
+		for (ArrayList<Block> bloque : bloques) {
+			bloque.get(0).draw();
 		}
 		
 		
-		
+
 	}
 
 	public void clear() {
