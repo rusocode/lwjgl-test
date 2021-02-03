@@ -44,7 +44,7 @@ public class Game {
 		// Configura la pantalla
 		Display.setTitle("Test LWJGL");
 		Display.setResizable(true);
-		Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT)); // Resolucion de la pantalla
+		// Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT)); // Resolucion de la pantalla
 		Display.setVSyncEnabled(VSYNC); // Si el hardware VSync esta habilitado
 		Display.setFullscreen(FULLSCREEN); // Si la pantalla completa esta habilitada
 

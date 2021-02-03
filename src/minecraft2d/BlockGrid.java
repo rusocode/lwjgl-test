@@ -10,21 +10,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static minecraft2d.World.*;
 
 class BlockGrid {
 
 	// Matriz de bloques
-	private Block[][] blocks = new Block[COLUMNAS][FILAS];
+	private Block[][] blocks = new Block[columnas][filas];
+
+	private ArrayList<Block> bloques;
 
 	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
-		for (int x = 0; x < COLUMNAS; x++) {
-			for (int y = 0; y < FILAS; y++) {
-				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
+
+		bloques = new ArrayList<>();
+
+		for (int x = 0; x < columnas; x++) {
+			for (int y = 0; y < filas; y++) {
+				bloques.add(new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE));
 			}
 		}
+
+		/* for (int x = 0; x < columnas; x++) { for (int y = 0; y < filas; y++) { blocks[x][y] = new Block(BlockType.AIR, x *
+		 * BLOCK_SIZE, y * BLOCK_SIZE); } } */
 	}
 
 	public void setAt(BlockType type, int x, int y) {
@@ -42,8 +51,8 @@ class BlockGrid {
 		Element root = new Element("blocks"); // Etiqueta raiz (bloques)
 		document.setRootElement(root); // Establece el elemento raiz
 
-		for (int x = 0; x < COLUMNAS; x++) {
-			for (int y = 0; y < FILAS; y++) {
+		for (int x = 0; x < columnas; x++) {
+			for (int y = 0; y < filas; y++) {
 
 				Element block = new Element("block"); // Segunda etiqueta (bloque)
 
@@ -100,16 +109,16 @@ class BlockGrid {
 
 	// Dibuja los bloques de cada posicion
 	public void draw() {
-		for (int x = 0; x < COLUMNAS; x++) {
-			for (int y = 0; y < FILAS; y++) {
+		for (int x = 0; x < columnas; x++) {
+			for (int y = 0; y < filas; y++) {
 				blocks[x][y].draw();
 			}
 		}
 	}
 
 	public void clear() {
-		for (int x = 0; x < COLUMNAS; x++) {
-			for (int y = 0; y < FILAS; y++) {
+		for (int x = 0; x < columnas; x++) {
+			for (int y = 0; y < filas; y++) {
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}

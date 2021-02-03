@@ -10,6 +10,8 @@ import pong.Pong;
 
 import java.io.File;
 
+import static minecraft2d.World.*;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Boot {
@@ -44,6 +46,10 @@ public class Boot {
 
 		while (!Display.isCloseRequested()) {
 
+			if (Display.wasResized()) resize();
+
+			System.out.println("Columnas=" + World.columnas + ", Filas=" + World.filas);
+
 			update();
 			render();
 			input();
@@ -62,6 +68,7 @@ public class Boot {
 	private void setUpDisplay() {
 		try {
 			Display.setTitle("Minecraft2D");
+			Display.setResizable(true);
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create();
 		} catch (LWJGLException e) {
@@ -78,6 +85,22 @@ public class Boot {
 		glOrtho(0, 640, 480, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
+	}
+
+	private void resize() {
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+
+		World.setColumnas(Boot.getWidth() / BLOCK_SIZE);
+		World.setFilas(Boot.getHeight() / BLOCK_SIZE);
+
+	}
+
+	public static int getWidth() {
+		return Display.getWidth();
+	}
+
+	public static int getHeight() {
+		return Display.getHeight();
 	}
 
 	private void update() {
@@ -117,7 +140,7 @@ public class Boot {
 	private static void input() {
 
 		int mousex = Mouse.getX();
-		int mousey = 480 - Mouse.getY() - 1; // -1 ?
+		int mousey = Display.getHeight() - Mouse.getY() - 1; // -1 ?
 
 		if (Mouse.isButtonDown(0)) {
 
@@ -137,6 +160,7 @@ public class Boot {
 			if (Keyboard.getEventKey() == Keyboard.KEY_2) selection = BlockType.GRASS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_3) selection = BlockType.DIRT;
 			if (Keyboard.getEventKey() == Keyboard.KEY_4) selection = BlockType.STONE;
+			if (Keyboard.getEventKey() == Keyboard.KEY_5) selection = BlockType.BRICK;
 		}
 
 	}
