@@ -19,18 +19,22 @@ import static minecraft2d.World.*;
 class BlockGrid {
 
 	// Matriz de bloques
-	private Block[][] blocks = new Block[columnas][filas];
+	private Block[][] blocks;
 
-	private ArrayList<Block> bloques;
+	// https://www.youtube.com/watch?v=9tBxJoQF74E
+	/* Necesitamos un array bidimensional para poder trabajar con las columnas y filas dinamicas de la ventana del juego, ya
+	 * que si el usuario redimensiona la ventana, entonces estos valores tienen que cambiar para poder evitar errores. */
+	// private ArrayList<ArrayList<Block>> bloques;
 
 	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
 
-		bloques = new ArrayList<>();
+		/* Una vez creada la matriz, no se pueden cambiar sus limites. */
+		blocks = new Block[columnas][filas];
 
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-				bloques.add(new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE));
+				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}
 
@@ -111,6 +115,7 @@ class BlockGrid {
 
 	// Dibuja los bloques de cada posicion
 	public void draw() {
+		System.out.println(columnas);
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
 				blocks[x][y].draw();

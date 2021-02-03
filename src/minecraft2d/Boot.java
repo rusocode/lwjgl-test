@@ -6,8 +6,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import pong.Pong;
-
 import java.io.File;
 
 import static minecraft2d.World.*;
@@ -46,10 +44,6 @@ public class Boot {
 
 		while (!Display.isCloseRequested()) {
 
-			if (Display.wasResized()) resize();
-
-			System.out.println("Columnas=" + World.columnas + ", Filas=" + World.filas);
-
 			update();
 			render();
 			input();
@@ -58,6 +52,9 @@ public class Boot {
 
 			Display.update();
 			Display.sync(60);
+
+			// Si se cambio el tamaño de la ventana, entonces...
+			if (Display.wasResized()) resize();
 
 		}
 
@@ -81,18 +78,10 @@ public class Boot {
 	private void setUpOpenGL() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		// Si cambio el origen a la esquina inferior izquierda las texturas se veran al revez
+		// Si cambio el origen a la esquina inferior izquierda las texturas se ven al revez (wtf?)
 		glOrtho(0, 640, 480, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		/* glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); */
-	}
-
-	private void resize() {
-		glViewport(0, 0, Display.getWidth(), Display.getHeight());
-
-		World.setColumnas(Boot.getWidth() / BLOCK_SIZE);
-		World.setFilas(Boot.getHeight() / BLOCK_SIZE);
-
 	}
 
 	public static int getWidth() {
@@ -112,6 +101,18 @@ public class Boot {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		grid.draw();
+
+	}
+
+	private void resize() {
+
+		// Especifica los parametros de transformacion de la ventana grafica para todas las ventanas graficas
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+
+		World.setColumnas(Boot.getWidth() / BLOCK_SIZE);
+		World.setFilas(Boot.getHeight() / BLOCK_SIZE);
+
+		// System.out.println("Columnas=" + World.columnas + ", Filas=" + World.filas);
 
 	}
 
