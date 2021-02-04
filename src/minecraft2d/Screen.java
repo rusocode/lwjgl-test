@@ -167,21 +167,21 @@ public class Screen {
 			 * = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
 			 * ancho de la pantalla. */
 			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) if (x + 1 < World.columnas) x++;
-				if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) if (x > 0) x--;
-				if (Keyboard.getEventKey() == Keyboard.KEY_UP) if (y > 0) y--;
-				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) if (y + 1 < World.filas) y++;
+				if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) x++;
+				if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) x--;
+				if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) y--;
+				if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) y++;
 			}
 
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
-			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
-			if (Keyboard.getEventKey() == Keyboard.KEY_1) type = BlockType.AIR;
-			if (Keyboard.getEventKey() == Keyboard.KEY_2) type = BlockType.GRASS;
-			if (Keyboard.getEventKey() == Keyboard.KEY_3) type = BlockType.DIRT;
-			if (Keyboard.getEventKey() == Keyboard.KEY_4) type = BlockType.STONE;
-			if (Keyboard.getEventKey() == Keyboard.KEY_5) type = BlockType.BRICK;
-			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear();
-			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_S)) grid.save(new File("save.xml"));
+			if (Keyboard.isKeyDown(Keyboard.KEY_L)) grid.load(new File("save.xml"));
+			if (Keyboard.isKeyDown(Keyboard.KEY_1)) type = BlockType.AIR;
+			if (Keyboard.isKeyDown(Keyboard.KEY_2)) type = BlockType.GRASS;
+			if (Keyboard.isKeyDown(Keyboard.KEY_3)) type = BlockType.DIRT;
+			if (Keyboard.isKeyDown(Keyboard.KEY_4)) type = BlockType.STONE;
+			if (Keyboard.isKeyDown(Keyboard.KEY_5)) type = BlockType.BRICK;
+			if (Keyboard.isKeyDown(Keyboard.KEY_C)) grid.clear();
+			if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
 				Display.destroy();
 				System.exit(0);
 			}
