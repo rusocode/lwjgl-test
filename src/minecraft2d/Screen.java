@@ -106,6 +106,8 @@ public class Screen {
 
 	private void render() {
 
+		/* En realidad no se necesita limpiar la pantalla, ya que creamos bloques todo el tiempo y no trabajamos con la misma
+		 * textura. */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		grid.draw();
@@ -119,17 +121,19 @@ public class Screen {
 	}
 
 	private void mouse() {
-		// Si el mouse esta habilitado, entonces...
+		// Si el mouse esta habilitado o si se hizo click izquierdo en la pantalla
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
 
+			/* Se vuelve a hablitar cuando se hace click izquierdo en la pantalla, ya que al usar el teclado el mouse quedo
+			 * deshabilitado y esta es la unica forma de habilitarlo (entrando a este metodo por asi decirlo). */
 			mouseEnabled = true;
 
 			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
 			x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
 			y = Math.round((height - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
 
-			// Si se hizo click izquierdo, entonces...
-			if (Mouse.isButtonDown(0)) grid.setAt(type, x, y); // Reemplaza el bloque seleccionado
+			// Si se hizo click izquierdo
+			if (Mouse.isButtonDown(0)) grid.setAt(type, x, y); // Crea un nuevo bloque
 
 		}
 	}
@@ -140,7 +144,7 @@ public class Screen {
 		while (Keyboard.next()) {
 
 			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
-			mouseEnabled = false;
+			// mouseEnabled = false;
 
 			/* Calculo los limites evitando asi un ArrayIndexOutOfBoundsException.
 			 * 
@@ -148,7 +152,10 @@ public class Screen {
 			 * = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
 			 * ancho de la pantalla. */
 			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) x++;
+				if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) {
+					x++;
+					mouseEnabled = false;
+				}
 				if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) x--;
 				if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) y--;
 				if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) y++;
@@ -173,8 +180,13 @@ public class Screen {
 
 	// Dibuja el cuadro de seleccion
 	private void drawSelectionBox() {
+
 		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
+
+		/* Es importante deshabilitar el mouse cuando se usa el teclado, ya que se van a estar tomando x e y de ambas entradas
+		 * (mouse y teclado) y nunca se va a mover el cuadro de seleccion. */
 		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
+
 		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
 	}
 
