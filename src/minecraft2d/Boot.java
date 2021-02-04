@@ -6,6 +6,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.File;
 
 import static minecraft2d.World.*;
@@ -64,9 +66,12 @@ public class Boot {
 
 	private void setUpDisplay() {
 		try {
+
 			Display.setTitle("Minecraft2D");
-			Display.setResizable(true);
+			Display.setResizable(false);
+
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -112,7 +117,7 @@ public class Boot {
 		World.setColumnas(Boot.getWidth() / BLOCK_SIZE);
 		World.setFilas(Boot.getHeight() / BLOCK_SIZE);
 
-		// System.out.println("Columnas=" + World.columnas + ", Filas=" + World.filas);
+		System.out.println(Display.getWidth() + "," + Display.getHeight());
 
 	}
 
@@ -147,8 +152,6 @@ public class Boot {
 
 			int grid_x = Math.round(mousex / World.BLOCK_SIZE);
 			int grid_y = Math.round(mousey / World.BLOCK_SIZE);
-
-			// System.out.println(grid_x + ", " + grid_y);
 
 			grid.setAt(selection, grid_x, grid_y);
 

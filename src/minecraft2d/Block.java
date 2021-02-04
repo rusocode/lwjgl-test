@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public final class Block{
+public final class Block {
 
 	private BlockType type;
 	private float x;

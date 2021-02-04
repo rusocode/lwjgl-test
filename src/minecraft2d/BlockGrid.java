@@ -18,46 +18,27 @@ import static minecraft2d.World.*;
 
 class BlockGrid {
 
-	// Matriz de bloques
+	// Matriz
 	private Block[][] blocks;
 
-	// https://www.youtube.com/watch?v=9tBxJoQF74E
-	/* Necesitamos un array bidimensional para poder trabajar con las columnas y filas dinamicas de la ventana del juego, ya
-	 * que si el usuario redimensiona la ventana, entonces estos valores tienen que cambiar para poder evitar errores. */
-	private ArrayList<ArrayList<Block>> bloques = new ArrayList<>();
+	// Usar ArrayList para manejar las dimensiones dinamicas de la ventana
+	// private ArrayList<Block> blocks;
 
-	private ArrayList<Block> bloque = new ArrayList<>();
-
-	// Crea un nuevo bloque para cada posicion de la matriz
 	public BlockGrid() {
 
+		blocks = new Block[columnas][filas];
+
+		// Crea 300 bloques y los agrega a la matriz
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-
-				bloque.add(new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE));
-
+				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
-
 		}
-		
-		bloques.add(bloque);
-		
-		// System.out.println(bloques);
 
-		/* Una vez creada la matriz, no se pueden cambiar sus limites. */
-		/* blocks = new Block[columnas][filas];
-		 * 
-		 * for (int x = 0; x < columnas; x++) { for (int y = 0; y < filas; y++) { blocks[x][y] = new Block(BlockType.AIR, x *
-		 * BLOCK_SIZE, y * BLOCK_SIZE); } } */
-
-		/* for (int x = 0; x < columnas; x++) { for (int y = 0; y < filas; y++) { blocks[x][y] = new Block(BlockType.AIR, x *
-		 * BLOCK_SIZE, y * BLOCK_SIZE); } } */
 	}
 
-	// Como obtengo el indice x e y del array? (bloques.get(x).get(y) ?)
 	public void setAt(BlockType type, int x, int y) {
-		// blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE); // FIXME hace falta crear un nuevo bloque o lo reemplazo?
-	
+		blocks[x][y] = new Block(type, x * BLOCK_SIZE, y * BLOCK_SIZE);
 	}
 
 	public Block getAt(int x, int y) {
@@ -130,18 +111,11 @@ class BlockGrid {
 	// Dibuja los bloques de cada posicion
 	public void draw() {
 
-		 /* for (int x = 0; x < columnas; x++) {
+		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-
 				blocks[x][y].draw();
 			}
-		} */
-		
-		for (ArrayList<Block> bloque : bloques) {
-			bloque.get(0).draw();
 		}
-		
-		
 
 	}
 
