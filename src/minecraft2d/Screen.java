@@ -23,7 +23,7 @@ public class Screen {
 
 	private static BlockType selection = BlockType.AIR; // Bloque de aire por defecto
 	private static int selector_x, selector_y;
-	private static boolean mouseEnabled = false;
+	private static boolean mouseEnabled = true;
 
 	public static void main(String[] args) {
 
@@ -127,7 +127,7 @@ public class Screen {
 	private static void input() {
 
 		// Si el mouse esta habilitado o si se hizo click, entonces...
-		if (mouseEnabled && Mouse.isButtonDown(0)) {
+		if (mouseEnabled || Mouse.isButtonDown(0)) {
 
 			mouseEnabled = true;
 
@@ -184,13 +184,6 @@ public class Screen {
 			}
 
 		}
-
-		class KeyboardBounds {
-
-			/* private boolean isOutBounds() { return } */
-
-		}
-
 	}
 
 	// Dibuja el cuadro seleccionado
