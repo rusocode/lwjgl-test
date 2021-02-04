@@ -6,8 +6,8 @@ public class World {
 	public static final int BLOCK_SIZE = 32;
 
 	// Valores por defecto
-	public static int columnas = Boot.getWidth() / BLOCK_SIZE;
-	public static int filas = Boot.getHeight() / BLOCK_SIZE;
+	public static int columnas = Screen.getWidth() / BLOCK_SIZE;
+	public static int filas = Screen.getHeight() / BLOCK_SIZE;
 
 	public static int getColumnas() {
 		return columnas;

@@ -28,9 +28,10 @@ class BlockGrid {
 
 		blocks = new Block[columnas][filas];
 
-		// Crea 300 bloques y los agrega a la matriz
+		// Crea un grilla de 300 bloques y los agrega a la matriz
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
+				// Crea un bloque de tipo, x * tamaño del bloque y y * tamaño de bloque
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}
