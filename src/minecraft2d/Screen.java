@@ -16,8 +16,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Screen {
 
-	private static final int DEFAULT_WIDTH = 640;
-	private static final int DEFAULT_HEIGHT = 480;
+	private static final int WIDTH = 640;
+	private static final int HEIGHT = 480;
 
 	private static BlockGrid grid;
 
@@ -70,7 +70,7 @@ public class Screen {
 			Display.setTitle("Minecraft 2D");
 			Display.setResizable(false);
 
-			Display.setDisplayMode(new DisplayMode(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -124,28 +124,57 @@ public class Screen {
 
 	}
 
-	private static void input() {
+	private void input() {
+		// Maneja las entradas del usuario por medio del mouse o el teclado
+		mouse();
+		keyboard();
+	}
 
-		// Si el mouse esta habilitado o si se hizo click, entonces...
+	// Dibuja el cuadro de seleccion
+	private static void drawSelectionBox() {
+
+		// Si el bloque seleccionado no es aire o si
+		if (grid.getAt(selector_x, selector_y).getType() != BlockType.AIR) {
+
+			System.out.println("Bloque distinto a AIR");
+
+			// glBindTexture(GL_TEXTURE_2D, 0); // Se deshace de las texturas enlazadas
+
+			// Color blanco con 50% de transparencia
+			glColor4f(1f, 1f, 1f, 0.5f);
+
+			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
+
+			// Color blanco con 100% de transparencia
+			glColor4f(1f, 1f, 1f, 1f);
+
+		} else {
+
+			System.out.println("Bloque igual a AIR");
+
+			glColor4f(1f, 1f, 1f, 0.5f);
+			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
+			glColor4f(1f, 1f, 1f, 1f);
+		}
+	}
+
+	private void mouse() {
+		// Si el mouse esta habilitado, entonces...
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
 
 			mouseEnabled = true;
 
-			// Obtiene la posicion del mouse (xy)
-			int mousex = Mouse.getX();
-			int mousey = Display.getHeight() - Mouse.getY() - 1; // -1 ?
-
-			boolean mouseClicked = Mouse.isButtonDown(0);
-
 			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
-			selector_x = Math.round(mousex / World.BLOCK_SIZE);
-			selector_y = Math.round(mousey / World.BLOCK_SIZE);
+			selector_x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
+			selector_y = Math.round((HEIGHT - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
 
-			// Reemplaza el bloque seleccionado
-			if (mouseClicked) grid.setAt(selection, selector_x, selector_y);
+			// Si se hizo click reemplaza el bloque seleccionado
+			if (Mouse.isButtonDown(0)) grid.setAt(selection, selector_x, selector_y);
 
 		}
+	}
 
+	private void keyboard() {
 		// Mientras se haya leido un evento del teclado, entonces...
 		while (Keyboard.next()) {
 
@@ -183,41 +212,6 @@ public class Screen {
 				System.exit(0);
 			}
 
-		}
-	}
-
-	// Dibuja el cuadro seleccionado
-	private static void drawSelectionBox() {
-
-		int x = selector_x * World.BLOCK_SIZE;
-		int y = selector_y * World.BLOCK_SIZE;
-		int x2 = x + World.BLOCK_SIZE;
-		int y2 = y + World.BLOCK_SIZE;
-
-		// Si el bloque seleccionado no es aire o si
-		if (grid.getAt(selector_x, selector_y).getType() != BlockType.AIR || selection == BlockType.AIR) {
-
-			// Se deshace de las texturas enlazadas
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			// Crea un color blanco con 50% de transparencia
-			glColor4f(1f, 1f, 1f, 0.5f);
-
-			// Dibuja ese color en la primera celda (0,0)
-			glBegin(GL_QUADS);
-			glVertex2i(x, y); // esq sup izq (origen)
-			glVertex2i(x2, y); // esq sup der
-			glVertex2i(x2, y2); // esq inf der
-			glVertex2i(x, y2); // esq inf izq
-			glEnd();
-
-			// Restablece la transparencia al 100%
-			glColor4f(1f, 1f, 1f, 1f);
-
-		} else {
-			glColor4f(1f, 1f, 1f, 0.5f);
-			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
-			glColor4f(1f, 1f, 1f, 1f);
 		}
 	}
 
