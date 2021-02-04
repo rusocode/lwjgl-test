@@ -111,13 +111,11 @@ class BlockGrid {
 
 	// Dibuja los bloques de cada posicion
 	public void draw() {
-
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
 				blocks[x][y].draw();
 			}
 		}
-
 	}
 
 	public void clear() {

@@ -19,11 +19,11 @@ public class Screen {
 	private final int width = 640;
 	private final int height = 480;
 
-	private static BlockGrid grid;
+	private BlockGrid grid;
 
-	private static BlockType type = BlockType.AIR; // Bloque de aire por defecto
-	private static int selector_x, selector_y;
-	private static boolean mouseEnabled = true;
+	private BlockType type = BlockType.AIR; // Bloque de aire por defecto
+	private int x, y;
+	private boolean mouseEnabled = true;
 
 	public static void main(String[] args) {
 
@@ -112,6 +112,19 @@ public class Screen {
 
 	}
 
+	// Maneja las entradas del usuario por medio del mouse o el teclado
+	private void input() {
+		mouse();
+		keyboard();
+	}
+
+	// Dibuja el cuadro de seleccion
+	private void drawSelectionBox() {
+		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
+		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
+		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
+	}
+
 	private void resize() {
 
 		// Especifica los parametros de transformacion de la ventana grafica para todas las ventanas graficas
@@ -124,19 +137,6 @@ public class Screen {
 
 	}
 
-	private void input() {
-		// Maneja las entradas del usuario por medio del mouse o el teclado
-		mouse();
-		keyboard();
-	}
-
-	// Dibuja el cuadro de seleccion
-	private void drawSelectionBox() {
-		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
-		new Block(type, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
-		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
-	}
-
 	private void mouse() {
 		// Si el mouse esta habilitado, entonces...
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
@@ -144,40 +144,31 @@ public class Screen {
 			mouseEnabled = true;
 
 			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
-			selector_x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
-			selector_y = Math.round((height - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
+			x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
+			y = Math.round((height - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
 
 			// Si se hizo click reemplaza el bloque seleccionado
-			if (Mouse.isButtonDown(0)) grid.setAt(type, selector_x, selector_y);
+			if (Mouse.isButtonDown(0)) grid.setAt(type, x, y);
 
 		}
 	}
 
 	private void keyboard() {
+
 		// Mientras se haya leido un evento del teclado, entonces...
 		while (Keyboard.next()) {
 
 			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
 			mouseEnabled = false;
 
-			if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
-				// Se le suma 1 sin asignar para que no llege a 20, evitando asi un ArrayIndexOutOfBoundsException
-				if (selector_x + 1 < World.columnas) selector_x += 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
-				// Si x es mayor a 0, entonces...
-				if (selector_x > 0) selector_x -= 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_UP && Keyboard.getEventKeyState()) {
-				// Si y es mayor a 0, entonces...
-				if (selector_y > 0) selector_y -= 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_DOWN && Keyboard.getEventKeyState()) {
-				// Si y es menor al limite de filas, entonces...
-				if (selector_y + 1 < World.filas) selector_y += 1;
+			if (Keyboard.getEventKeyState()) {
+				// Calculo los limites evitando asi un ArrayIndexOutOfBoundsException
+				if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) if (x + 1 < World.columnas) x += 1; // Si x es menor al limire de columnas
+				if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) if (x > 0) x -= 1; // Si x es mayor a 0
+				if (Keyboard.getEventKey() == Keyboard.KEY_UP) if (y > 0) y -= 1; // Si y es mayor a 0
+				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) if (y + 1 < World.filas) y += 1; // Si y es menor al limite de filas
 			}
 
-			// Si el evento causado es igual a la tecla S, entonces...
 			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
 			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
 			if (Keyboard.getEventKey() == Keyboard.KEY_1) type = BlockType.AIR;
@@ -192,6 +183,7 @@ public class Screen {
 			}
 
 		}
+
 	}
 
 }
