@@ -10,15 +10,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static minecraft2d.World.*;
 
-// http://panamahitek.com/listas-multidimensionales-en-java/
-
 class BlockGrid {
 
-	// Matriz
+	// Matriz de Block sin inicializar
 	private Block[][] blocks;
 
 	// Usar ArrayList para manejar las dimensiones dinamicas de la ventana
@@ -26,12 +23,12 @@ class BlockGrid {
 
 	public BlockGrid() {
 
+		// Crea una matriz de 300 posiciones
 		blocks = new Block[columnas][filas];
 
-		// Crea un grilla de 300 bloques y los agrega a la matriz
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-				// Crea un bloque de tipo, x * tamaño del bloque y y * tamaño de bloque
+				// Crea un bloque de tipo, x * tamaño del bloque y y * tamaño de bloque, y lo agrega a la matriz
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}

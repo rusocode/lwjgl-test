@@ -21,7 +21,7 @@ public class Screen {
 
 	private BlockGrid grid;
 
-	private BlockType type = BlockType.AIR; // Bloque de aire por defecto
+	private BlockType type = BlockType.BRICK; // Bloque de aire por defecto
 	private int x, y;
 	private boolean mouseEnabled = true;
 
@@ -118,25 +118,6 @@ public class Screen {
 		keyboard();
 	}
 
-	// Dibuja el cuadro de seleccion
-	private void drawSelectionBox() {
-		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
-		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
-		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
-	}
-
-	private void resize() {
-
-		// Especifica los parametros de transformacion de la ventana grafica para todas las ventanas graficas
-		glViewport(0, 0, Display.getWidth(), Display.getHeight());
-
-		World.setColumnas(Screen.getWidth() / BLOCK_SIZE);
-		World.setFilas(Screen.getHeight() / BLOCK_SIZE);
-
-		System.out.println(Display.getWidth() + "," + Display.getHeight());
-
-	}
-
 	private void mouse() {
 		// Si el mouse esta habilitado, entonces...
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
@@ -155,7 +136,7 @@ public class Screen {
 
 	private void keyboard() {
 
-		// Mientras se haya leido un evento del teclado, entonces...
+		// Mientras se haya leido un evento del teclado
 		while (Keyboard.next()) {
 
 			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
@@ -187,6 +168,25 @@ public class Screen {
 			}
 
 		}
+
+	}
+
+	// Dibuja el cuadro de seleccion
+	private void drawSelectionBox() {
+		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
+		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
+		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
+	}
+
+	private void resize() {
+
+		// Especifica los parametros de transformacion de la ventana grafica para todas las ventanas graficas
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+
+		World.setColumnas(Screen.getWidth() / BLOCK_SIZE);
+		World.setFilas(Screen.getHeight() / BLOCK_SIZE);
+
+		System.out.println(Display.getWidth() + "," + Display.getHeight());
 
 	}
 

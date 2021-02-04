@@ -18,12 +18,12 @@ public final class Block {
 
 	private Texture texture;
 
-	// Crea un bloque y decodifica la imagen de tipo PNG (en "location") para trabajarla como una textura
 	public Block(BlockType type, float x, float y) {
 		this.type = type;
 		this.x = x;
 		this.y = y;
 		try {
+			// Decodifica la imagen de tipo PNG (en "location") para trabajarla como una textura
 			this.texture = TextureLoader.getTexture("PNG", new FileInputStream(new File(type.location)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
