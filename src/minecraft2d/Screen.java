@@ -147,8 +147,8 @@ public class Screen {
 			x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
 			y = Math.round((height - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
 
-			// Si se hizo click reemplaza el bloque seleccionado
-			if (Mouse.isButtonDown(0)) grid.setAt(type, x, y);
+			// Si se hizo click izquierdo, entonces...
+			if (Mouse.isButtonDown(0)) grid.setAt(type, x, y); // Reemplaza el bloque seleccionado
 
 		}
 	}
@@ -161,12 +161,16 @@ public class Screen {
 			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
 			mouseEnabled = false;
 
+			/* Calculo los limites evitando asi un ArrayIndexOutOfBoundsException.
+			 * 
+			 * Para el movimiento derecho, x solo tiene que llegar hasta 19 y no 20 (por eso el "x + 1" sin asignar), ya que 19 * 32
+			 * = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
+			 * ancho de la pantalla. */
 			if (Keyboard.getEventKeyState()) {
-				// Calculo los limites evitando asi un ArrayIndexOutOfBoundsException
-				if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) if (x + 1 < World.columnas) x += 1; // Si x es menor al limire de columnas
-				if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) if (x > 0) x -= 1; // Si x es mayor a 0
-				if (Keyboard.getEventKey() == Keyboard.KEY_UP) if (y > 0) y -= 1; // Si y es mayor a 0
-				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) if (y + 1 < World.filas) y += 1; // Si y es menor al limite de filas
+				if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT) if (x + 1 < World.columnas) x++;
+				if (Keyboard.getEventKey() == Keyboard.KEY_LEFT) if (x > 0) x--;
+				if (Keyboard.getEventKey() == Keyboard.KEY_UP) if (y > 0) y--;
+				if (Keyboard.getEventKey() == Keyboard.KEY_DOWN) if (y + 1 < World.filas) y++;
 			}
 
 			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
@@ -176,7 +180,7 @@ public class Screen {
 			if (Keyboard.getEventKey() == Keyboard.KEY_3) type = BlockType.DIRT;
 			if (Keyboard.getEventKey() == Keyboard.KEY_4) type = BlockType.STONE;
 			if (Keyboard.getEventKey() == Keyboard.KEY_5) type = BlockType.BRICK;
-			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear(); // reset
+			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear();
 			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
 				Display.destroy();
 				System.exit(0);
