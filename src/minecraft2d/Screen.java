@@ -22,8 +22,8 @@ public class Screen {
 	private static BlockGrid grid;
 
 	private static BlockType selection = BlockType.AIR; // Bloque de aire por defecto
-	private static int selector_x = 0, selector_y = 0;
-	private static boolean mouseEnabled = true;
+	private static int selector_x, selector_y;
+	private static boolean mouseEnabled = false;
 
 	public static void main(String[] args) {
 
@@ -124,6 +124,75 @@ public class Screen {
 
 	}
 
+	private static void input() {
+
+		// Si el mouse esta habilitado o si se hizo click, entonces...
+		if (mouseEnabled && Mouse.isButtonDown(0)) {
+
+			mouseEnabled = true;
+
+			// Obtiene la posicion del mouse (xy)
+			int mousex = Mouse.getX();
+			int mousey = Display.getHeight() - Mouse.getY() - 1; // -1 ?
+
+			boolean mouseClicked = Mouse.isButtonDown(0);
+
+			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
+			selector_x = Math.round(mousex / World.BLOCK_SIZE);
+			selector_y = Math.round(mousey / World.BLOCK_SIZE);
+
+			// Reemplaza el bloque seleccionado
+			if (mouseClicked) grid.setAt(selection, selector_x, selector_y);
+
+		}
+
+		// Mientras se haya leido un evento del teclado, entonces...
+		while (Keyboard.next()) {
+
+			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
+			mouseEnabled = false;
+
+			if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
+				// Se le suma 1 sin asignar para que no llege a 20, evitando asi un ArrayIndexOutOfBoundsException
+				if (selector_x + 1 < World.columnas) selector_x += 1;
+			}
+			if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
+				// Si x es mayor a 0, entonces...
+				if (selector_x > 0) selector_x -= 1;
+			}
+			if (Keyboard.getEventKey() == Keyboard.KEY_UP && Keyboard.getEventKeyState()) {
+				// Si y es mayor a 0, entonces...
+				if (selector_y > 0) selector_y -= 1;
+			}
+			if (Keyboard.getEventKey() == Keyboard.KEY_DOWN && Keyboard.getEventKeyState()) {
+				// Si y es menor al limite de filas, entonces...
+				if (selector_y + 1 < World.filas) selector_y += 1;
+			}
+
+			// Si el evento causado es igual a la tecla S, entonces...
+			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
+			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
+			if (Keyboard.getEventKey() == Keyboard.KEY_1) selection = BlockType.AIR;
+			if (Keyboard.getEventKey() == Keyboard.KEY_2) selection = BlockType.GRASS;
+			if (Keyboard.getEventKey() == Keyboard.KEY_3) selection = BlockType.DIRT;
+			if (Keyboard.getEventKey() == Keyboard.KEY_4) selection = BlockType.STONE;
+			if (Keyboard.getEventKey() == Keyboard.KEY_5) selection = BlockType.BRICK;
+			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear(); // reset
+			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
+				Display.destroy();
+				System.exit(0);
+			}
+
+		}
+
+		class KeyboardBounds {
+
+			/* private boolean isOutBounds() { return } */
+
+		}
+
+	}
+
 	// Dibuja el cuadro seleccionado
 	private static void drawSelectionBox() {
 
@@ -157,65 +226,6 @@ public class Screen {
 			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
 			glColor4f(1f, 1f, 1f, 1f);
 		}
-	}
-
-	private static void input() {
-
-		// Si el mouse esta habilitado o si se hizo click, entonces...
-		if (mouseEnabled || Mouse.isButtonDown(0)) {
-
-			mouseEnabled = true;
-
-			// Obtiene la posicion del mouse (xy)
-			int mousex = Mouse.getX();
-			int mousey = Display.getHeight() - Mouse.getY() - 1; // -1 ?
-
-			boolean mouseClicked = Mouse.isButtonDown(0);
-
-			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
-			selector_x = Math.round(mousex / World.BLOCK_SIZE);
-			selector_y = Math.round(mousey / World.BLOCK_SIZE);
-
-			// Reemplaza el bloque seleccionado
-			if (mouseClicked) grid.setAt(selection, selector_x, selector_y);
-
-		}
-
-		// Mientras se haya leido un evento del teclado, entonces...
-		while (Keyboard.next()) {
-
-			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan
-			mouseEnabled = false;
-
-			if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
-				if (!(selector_x + 1 >= World.columnas)) selector_x += 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
-				if (!(selector_x - 1 < 0)) selector_x -= 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_UP && Keyboard.getEventKeyState()) {
-				if (!(selector_y - 1 < 0)) selector_y -= 1;
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_DOWN && Keyboard.getEventKeyState()) {
-				if (!(selector_y + 1 >= World.filas)) selector_y += 1;
-			}
-
-			// Si el evento causado es igual a la tecla S, entonces...
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
-			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
-			if (Keyboard.getEventKey() == Keyboard.KEY_1) selection = BlockType.AIR;
-			if (Keyboard.getEventKey() == Keyboard.KEY_2) selection = BlockType.GRASS;
-			if (Keyboard.getEventKey() == Keyboard.KEY_3) selection = BlockType.DIRT;
-			if (Keyboard.getEventKey() == Keyboard.KEY_4) selection = BlockType.STONE;
-			if (Keyboard.getEventKey() == Keyboard.KEY_5) selection = BlockType.BRICK;
-			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear(); // reset
-			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-				Display.destroy();
-				System.exit(0);
-			}
-
-		}
-
 	}
 
 }
