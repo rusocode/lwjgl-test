@@ -16,12 +16,12 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Screen {
 
-	private static final int WIDTH = 640;
-	private static final int HEIGHT = 480;
+	private final int width = 640;
+	private final int height = 480;
 
 	private static BlockGrid grid;
 
-	private static BlockType selection = BlockType.AIR; // Bloque de aire por defecto
+	private static BlockType type = BlockType.AIR; // Bloque de aire por defecto
 	private static int selector_x, selector_y;
 	private static boolean mouseEnabled = true;
 
@@ -70,7 +70,7 @@ public class Screen {
 			Display.setTitle("Minecraft 2D");
 			Display.setResizable(false);
 
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			Display.setDisplayMode(new DisplayMode(width, height));
 
 			Display.create();
 		} catch (LWJGLException e) {
@@ -131,31 +131,10 @@ public class Screen {
 	}
 
 	// Dibuja el cuadro de seleccion
-	private static void drawSelectionBox() {
-
-		// Si el bloque seleccionado no es aire o si
-		if (grid.getAt(selector_x, selector_y).getType() != BlockType.AIR) {
-
-			System.out.println("Bloque distinto a AIR");
-
-			// glBindTexture(GL_TEXTURE_2D, 0); // Se deshace de las texturas enlazadas
-
-			// Color blanco con 50% de transparencia
-			glColor4f(1f, 1f, 1f, 0.5f);
-
-			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
-
-			// Color blanco con 100% de transparencia
-			glColor4f(1f, 1f, 1f, 1f);
-
-		} else {
-
-			System.out.println("Bloque igual a AIR");
-
-			glColor4f(1f, 1f, 1f, 0.5f);
-			new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
-			glColor4f(1f, 1f, 1f, 1f);
-		}
+	private void drawSelectionBox() {
+		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
+		new Block(type, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
+		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
 	}
 
 	private void mouse() {
@@ -166,10 +145,10 @@ public class Screen {
 
 			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
 			selector_x = Math.round(Mouse.getX() / World.BLOCK_SIZE);
-			selector_y = Math.round((HEIGHT - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
+			selector_y = Math.round((height - Mouse.getY() - 1) / World.BLOCK_SIZE); // -1 ?
 
 			// Si se hizo click reemplaza el bloque seleccionado
-			if (Mouse.isButtonDown(0)) grid.setAt(selection, selector_x, selector_y);
+			if (Mouse.isButtonDown(0)) grid.setAt(type, selector_x, selector_y);
 
 		}
 	}
@@ -201,11 +180,11 @@ public class Screen {
 			// Si el evento causado es igual a la tecla S, entonces...
 			if (Keyboard.getEventKey() == Keyboard.KEY_S) grid.save(new File("save.xml"));
 			if (Keyboard.getEventKey() == Keyboard.KEY_L) grid.load(new File("save.xml"));
-			if (Keyboard.getEventKey() == Keyboard.KEY_1) selection = BlockType.AIR;
-			if (Keyboard.getEventKey() == Keyboard.KEY_2) selection = BlockType.GRASS;
-			if (Keyboard.getEventKey() == Keyboard.KEY_3) selection = BlockType.DIRT;
-			if (Keyboard.getEventKey() == Keyboard.KEY_4) selection = BlockType.STONE;
-			if (Keyboard.getEventKey() == Keyboard.KEY_5) selection = BlockType.BRICK;
+			if (Keyboard.getEventKey() == Keyboard.KEY_1) type = BlockType.AIR;
+			if (Keyboard.getEventKey() == Keyboard.KEY_2) type = BlockType.GRASS;
+			if (Keyboard.getEventKey() == Keyboard.KEY_3) type = BlockType.DIRT;
+			if (Keyboard.getEventKey() == Keyboard.KEY_4) type = BlockType.STONE;
+			if (Keyboard.getEventKey() == Keyboard.KEY_5) type = BlockType.BRICK;
 			if (Keyboard.getEventKey() == Keyboard.KEY_C) grid.clear(); // reset
 			if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
 				Display.destroy();
