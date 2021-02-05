@@ -28,7 +28,7 @@ class BlockGrid {
 
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
-				// Crea un bloque de tipo, x * tamaño del bloque y y * tamaño de bloque, y lo agrega a la matriz
+				// Crea un bloque y lo agrega a la matriz
 				blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
 			}
 		}
@@ -106,7 +106,7 @@ class BlockGrid {
 		}
 	}
 
-	// Dibuja los bloques de cada posicion
+	// Dibuja las textura en cada posicion de la matriz
 	public void draw() {
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {

@@ -44,12 +44,7 @@ public final class Block {
 		return y;
 	}
 
-	// FIXME este metodo no se usa
-	public void bind() {
-		texture.bind(); // Enlaza la textura antes de renderizarla
-	}
-
-	// Rellana cada posicion de la matriz con la textura especificada
+	// Dibuja la textura
 	public void draw() {
 
 		// Habilita el texturizado 2D

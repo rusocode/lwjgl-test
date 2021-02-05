@@ -6,8 +6,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.File;
 
 import static minecraft2d.World.*;
@@ -21,7 +19,7 @@ public class Screen {
 
 	private BlockGrid grid;
 
-	private BlockType type = BlockType.BRICK; // Bloque de aire por defecto
+	private BlockType type = BlockType.BRICK; // Bloque de ladrillo por defecto
 	private int x, y;
 	private boolean mouseEnabled = true;
 
@@ -66,12 +64,9 @@ public class Screen {
 
 	private void setUpDisplay() {
 		try {
-
 			Display.setTitle("Minecraft 2D");
 			Display.setResizable(false);
-
 			Display.setDisplayMode(new DisplayMode(width, height));
-
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -86,8 +81,6 @@ public class Screen {
 		// Si cambio el origen a la esquina inferior izquierda las texturas se ven al revez (wtf?)
 		glOrtho(0, 640, 480, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
-
-		//
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
@@ -124,7 +117,7 @@ public class Screen {
 		// Si el mouse esta habilitado o si se hizo click izquierdo en la pantalla
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
 
-			/* Se vuelve a hablitar cuando se hace click izquierdo en la pantalla, ya que al usar el teclado el mouse quedo
+			/* Se vuelve a hablitar cuando se hace click izquierdo en la pantalla, ya que al usar el teclado, el mouse queda
 			 * deshabilitado y esta es la unica forma de habilitarlo (entrando a este metodo por asi decirlo). */
 			mouseEnabled = true;
 
@@ -143,22 +136,29 @@ public class Screen {
 		// Mientras se haya leido un evento del teclado
 		while (Keyboard.next()) {
 
-			// Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
-			// mouseEnabled = false;
-
-			/* Calculo los limites evitando asi un ArrayIndexOutOfBoundsException.
+			/* Calcula los limites de la matriz evitando sumar o restar una posicion fuera de los limites
+			 * (ArrayIndexOutOfBoundsException).
 			 * 
-			 * Para el movimiento derecho, x solo tiene que llegar hasta 19 y no 20 (por eso el "x + 1" sin asignar), ya que 19 * 32
-			 * = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
+			 * Para el movimiento KEY_RIGHT, x solo tiene que llegar hasta 19 y no 20 (por eso el "x + 1" sin asignar), ya que 19 *
+			 * 32 = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
 			 * ancho de la pantalla. */
 			if (Keyboard.getEventKeyState()) {
 				if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) {
 					x++;
+					mouseEnabled = false; // Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) {
+					x--;
 					mouseEnabled = false;
 				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) x--;
-				if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) y--;
-				if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) y++;
+				if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) {
+					y--;
+					mouseEnabled = false;
+				}
+				if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) {
+					y++;
+					mouseEnabled = false;
+				}
 			}
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_S)) grid.save(new File("save.xml"));
@@ -187,6 +187,7 @@ public class Screen {
 		 * (mouse y teclado) y nunca se va a mover el cuadro de seleccion. */
 		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
 
+		// ?
 		glColor4f(1f, 1f, 1f, 1f); // Color blanco con 100% de transparencia
 	}
 

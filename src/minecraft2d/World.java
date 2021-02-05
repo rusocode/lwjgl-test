@@ -2,10 +2,10 @@ package minecraft2d;
 
 public class World {
 
-	// Tamaño del bloque = 32 pixeles
+	// Textura de 32 pixeles justo para 640 y 480?
 	public static final int BLOCK_SIZE = 32;
 
-	// Valores por defecto
+	// Calcula el cantidad de columnas y filas dependiendo del tamaño de la ventana y la textura
 	public static int columnas = Screen.getWidth() / BLOCK_SIZE;
 	public static int filas = Screen.getHeight() / BLOCK_SIZE;
 
