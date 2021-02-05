@@ -136,29 +136,32 @@ public class Screen {
 		// Mientras se haya leido un evento del teclado
 		while (Keyboard.next()) {
 
+			/* Para usar el metodo getEventKey(), es necesario controlar las teclas con un getEventKeyState() ya que asegura de que
+			 * solo registre las teclas que se presionan, no las que se liberan. El metodo isKeyDown() se puede usar para verificar
+			 * las teclas presionadas, en lugar de presionar una tecla una vez con getKeyEvent(). */
+
 			/* Calcula los limites de la matriz evitando sumar o restar una posicion fuera de los limites
 			 * (ArrayIndexOutOfBoundsException).
 			 * 
 			 * Para el movimiento KEY_RIGHT, x solo tiene que llegar hasta 19 y no 20 (por eso el "x + 1" sin asignar), ya que 19 *
 			 * 32 = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
 			 * ancho de la pantalla. */
-			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) {
-					x++;
-					mouseEnabled = false; // Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) {
-					x--;
-					mouseEnabled = false;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) {
-					y--;
-					mouseEnabled = false;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) {
-					y++;
-					mouseEnabled = false;
-				}
+
+			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) {
+				x++;
+				mouseEnabled = false; // Deshabilita el mouse cuando se usa el teclado para que no se superpongan los eventos
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) if (x > 0) {
+				x--;
+				mouseEnabled = false;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_UP)) if (y > 0) {
+				y--;
+				mouseEnabled = false;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) if (y + 1 < World.filas) {
+				y++;
+				mouseEnabled = false;
 			}
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_S)) grid.save(new File("save.xml"));
