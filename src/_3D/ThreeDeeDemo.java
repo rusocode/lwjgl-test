@@ -1,4 +1,4 @@
-package ejemplos;
+package _3D;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -6,14 +6,14 @@ import org.lwjgl.opengl.DisplayMode;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class SimpleOGLRenderer {
+public class ThreeDeeDemo {
 
 	private final int width = 640;
 	private final int height = 480;
 
 	public static void main(String[] args) {
 		try {
-			new SimpleOGLRenderer().start();
+			new ThreeDeeDemo().start();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			Display.destroy();
