@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static minecraft2d.World.*;
 
+// Clase visible solo para el paquete
 class BlockGrid {
 
 	// Matriz de Block sin inicializar
