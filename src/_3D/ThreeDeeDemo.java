@@ -74,7 +74,7 @@ public class ThreeDeeDemo {
 		// +x esta a la derecha
 		// +y esta en la cima
 		// +z es para la camara
-		gluPerspective((float) 30, 640f / 480f, 0.001f, 100);
+		gluPerspective((float) 30, 640f / 480f, 0.001f, 100); // Diferencia entre el angulo y el zFar
 
 		glMatrixMode(GL_MODELVIEW);
 
