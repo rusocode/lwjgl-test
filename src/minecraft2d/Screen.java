@@ -99,8 +99,10 @@ public class Screen {
 
 	private void render() {
 
-		/* En realidad no se necesita limpiar la pantalla, ya que creamos bloques todo el tiempo y no trabajamos con la misma
-		 * textura. */
+		/*
+		 * En realidad no se necesita limpiar la pantalla, ya que creamos bloques todo el tiempo y no trabajamos con la misma
+		 * textura.
+		 */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		grid.draw();
@@ -117,8 +119,10 @@ public class Screen {
 		// Si el mouse esta habilitado o si se hizo click izquierdo en la pantalla
 		if (mouseEnabled || Mouse.isButtonDown(0)) {
 
-			/* Se vuelve a hablitar cuando se hace click izquierdo en la pantalla, ya que al usar el teclado, el mouse queda
-			 * deshabilitado y esta es la unica forma de habilitarlo (entrando a este metodo por asi decirlo). */
+			/*
+			 * Se vuelve a hablitar cuando se hace click izquierdo en la pantalla, ya que al usar el teclado, el mouse queda
+			 * deshabilitado y esta es la unica forma de habilitarlo (entrando a este metodo por asi decirlo).
+			 */
 			mouseEnabled = true;
 
 			// Divide la posicion del mouse por el tamaño del bloque y lo redondea para obtener el numero exacto de la grilla
@@ -136,16 +140,20 @@ public class Screen {
 		// Mientras se haya leido un evento del teclado
 		while (Keyboard.next()) {
 
-			/* Para usar el metodo getEventKey(), es necesario controlar las teclas con un getEventKeyState() ya que asegura de que
+			/*
+			 * Para usar el metodo getEventKey(), es necesario controlar las teclas con un getEventKeyState() ya que asegura de que
 			 * solo registre las teclas que se presionan, no las que se liberan. El metodo isKeyDown() se puede usar para verificar
-			 * las teclas presionadas, en lugar de presionar una tecla una vez con getKeyEvent(). */
+			 * las teclas presionadas, en lugar de presionar una tecla una vez con getKeyEvent().
+			 */
 
-			/* Calcula los limites de la matriz evitando sumar o restar una posicion fuera de los limites
+			/*
+			 * Calcula los limites de la matriz evitando sumar o restar una posicion fuera de los limites
 			 * (ArrayIndexOutOfBoundsException).
 			 * 
 			 * Para el movimiento KEY_RIGHT, x solo tiene que llegar hasta 19 y no 20 (por eso el "x + 1" sin asignar), ya que 19 *
 			 * 32 = 608, dejando el espacio sobrante para la textura de 32 pixeles (608 + 32 = 640 limite) sin pasar el limite del
-			 * ancho de la pantalla. */
+			 * ancho de la pantalla.
+			 */
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) if (x + 1 < World.columnas) {
 				x++;
@@ -186,8 +194,10 @@ public class Screen {
 
 		glColor4f(1f, 1f, 1f, 0.5f); // Color blanco con 50% de transparencia
 
-		/* Es importante deshabilitar el mouse cuando se usa el teclado, ya que se van a estar tomando x e y de ambas entradas
-		 * (mouse y teclado) y nunca se va a mover el cuadro de seleccion. */
+		/*
+		 * Es importante deshabilitar el mouse cuando se usa el teclado, ya que se van a estar tomando x e y de ambas entradas
+		 * (mouse y teclado) y nunca se va a mover el cuadro de seleccion.
+		 */
 		new Block(type, x * World.BLOCK_SIZE, y * World.BLOCK_SIZE).draw();
 
 		// ?
