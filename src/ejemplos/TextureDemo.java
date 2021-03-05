@@ -37,7 +37,7 @@ public class TextureDemo {
 		Display.setDisplayMode(new DisplayMode(640, 480));
 		Display.create();
 
-		img = loadTexture("ladrillo");
+		img = loadTexture("brick");
 
 		create();
 
@@ -60,7 +60,7 @@ public class TextureDemo {
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0, 640, 0, 480, 1, -1); // esq inf izquierda
+		glOrtho(0, 640, 480, 0, 1, -1); // esq superior izquierda, si utilizo la esq inf izq la textura se voltea, xq?
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		// Habilita el texturizado 2D
@@ -89,7 +89,7 @@ public class TextureDemo {
 	private Texture loadTexture(String key) {
 
 		try {
-			return TextureLoader.getTexture("PNG", new FileInputStream(new File("res/" + key + ".png")));
+			return TextureLoader.getTexture("PNG", new FileInputStream(new File("res/img/" + key + ".png")));
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "No se pudo encontrar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
