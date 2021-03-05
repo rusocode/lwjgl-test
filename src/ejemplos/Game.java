@@ -93,17 +93,21 @@ public class Game {
 		// glEnable(GL_BLEND);
 		// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		/* Ingrese el estado requerido para modificar la proyeccion. Tenga en cuenta que, a diferencia de Java2D, el sistema de
+		/*
+		 * Ingrese el estado requerido para modificar la proyeccion. Tenga en cuenta que, a diferencia de Java2D, el sistema de
 		 * coordenadas del vertice no tiene que ser igual al espacio de coordenadas de la ventana. La invocacion a glOrtho crea
-		 * un sistema de coordenadas de vertice 2D como este: */
+		 * un sistema de coordenadas de vertice 2D como este:
+		 */
 		// Upper-Left: (0,0) Upper-Right: (640,0)
 		// Bottom-Left: (0,480) Bottom-Right: (640,480)
 		// Si omite la invocacion del metodo glOrtho, el espacio de coordenadas de proyeccion 2D predeterminado sera asi:
 		// Upper-Left: (-1,+1) Upper-Right: (+1,+1)
 		// Bottom-Left: (-1,-1) Bottom-Right: (+1,-1)
-		/* Un monitor de computadora es una superficie 2D. Una escena 3D renderizada por OpenGL debe proyectarse en la pantalla
+		/*
+		 * Un monitor de computadora es una superficie 2D. Una escena 3D renderizada por OpenGL debe proyectarse en la pantalla
 		 * de la computadora como una imagen 2D. La matriz GL_PROJECTION se utiliza para esta transformacion de proyeccion.
-		 * http://www.songho.ca/opengl/gl_projectionmatrix.html */
+		 * http://www.songho.ca/opengl/gl_projectionmatrix.html
+		 */
 		glMatrixMode(GL_PROJECTION); // Lente
 		// glLoadIdentity(); // Restablece cualquier matriz de proyeccion anterior
 		glOrtho(LEFT, RIGHT, BOTTOM, TOP, NEAR, FAR); // https://stackoverflow.com/questions/2571402/how-to-use-glortho-in-opengl
@@ -130,23 +134,40 @@ public class Game {
 		// ">>" denota una pieza posiblemente modificada de la documentacion de OpenGL (http://www.opengl.org/sdk/docs/man/)
 		// >> glBegin y glEnd delimitan los vertices que definen una primitiva o un grupo de primitivas similares
 		// >> glBegin acepta un solo argumento que especifica como se interpretan los vertices
-		/* Todas las proximas llamadas a vertices se tomaran como puntos de un cuadrilatero hasta que se llame a glEnd. Dado que
-		 * esta primitiva requiere cuatro vertices, tendremos que llamar a glVertex cuatro veces. */
+		/*
+		 * Todas las proximas llamadas a vertices se tomaran como puntos de un cuadrilatero hasta que se llame a glEnd. Dado que
+		 * esta primitiva requiere cuatro vertices, tendremos que llamar a glVertex cuatro veces.
+		 */
 
-		/* Modo inmediato (obsoleto)
-		 * (https://stackoverflow.com/questions/6733934/what-does-immediate-mode-mean-in-opengl/36166310#36166310) */
+		/*
+		 * Modo inmediato (obsoleto)
+		 * (https://stackoverflow.com/questions/6733934/what-does-immediate-mode-mean-in-opengl/36166310#36166310)
+		 * 
+		 * La razon por la que el modo inmediato no es optimo es que la tarjeta grafica esta vinculada directamente con el flujo
+		 * de su programa. El controlador no puede decirle a la GPU que comience a renderizar antes glEnd, porque no sabe cuando
+		 * terminara de enviar datos y tambien necesita transferir esos datos (lo que solo puede hacer despues glEnd).
+		 * 
+		 * En contraste con eso, si usas, por ejemplo, un objeto de buffer de vertice, llenas un buffer con datos y lo entregas a
+		 * OpenGL. Su proceso ya no posee estos datos y, por lo tanto, ya no puede modificarlos. El conductor puede confiar en
+		 * este hecho y puede (incluso especulativamente) cargar los datos siempre que el autobus este libre.
+		 * 
+		 */
 
 		glBegin(GL_QUADS);
-		/* >> Los comandos glVertex se utilizan dentro de los pares glBegin/glEnd para especificar vertices de punto, linea y
-		 * poligono. */
+		/*
+		 * >> Los comandos glVertex se utilizan dentro de los pares glBegin/glEnd para especificar vertices de punto, linea y
+		 * poligono.
+		 */
 		// >> glColor establece el color actual (a todas las llamadas posteriores a glVertex se les asignara este color)
 		// >> El numero despues de 'glVertex'/'glColor' indica la cantidad de componentes (xyzw / rgba)
 		// >> El caracter despues del numero indica el tipo de argumento
 		// >> (para 'glVertex': d=Double, f=Float, i=Integer)
 		// >> (para 'glColor': d=Double, f=Float, b=Signed Byte, ub=Unsigned Byte)
-		/* El numero 2 de glVertex le indica cuantos componentes tendra el vertice (x e y), siendo un modelo 2D en este caso. Si
+		/*
+		 * El numero 2 de glVertex le indica cuantos componentes tendra el vertice (x e y), siendo un modelo 2D en este caso. Si
 		 * se envia un vertice a OpenGL, vincula el estado del color actual al vertice y lo dibuja en consecuencia. Los valores
-		 * de color para dobles y flotantes varian de 0.0 a 1.0 y para bytes sin firmar varian de 0 a 255. */
+		 * de color para dobles y flotantes varian de 0.0 a 1.0 y para bytes sin firmar varian de 0 a 255.
+		 */
 		glColor3f(1.0f, 0.0f, 0.0f); // Verde puro
 		glVertex2i(0, 0);
 		glColor3b((byte) 0, (byte) 127, (byte) 0); // Rojo puro

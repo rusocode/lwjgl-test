@@ -16,13 +16,15 @@ import org.lwjgl.opengl.DisplayMode;
 
 public class Delta {
 
-	/* En primer lugar, la hora del sistema se almacena en una variable de tipo long llamada "lastFrame". Luego, en el bucle
+	/*
+	 * En primer lugar, la hora del sistema se almacena en una variable de tipo long llamada "lastFrame". Luego, en el bucle
 	 * del juego, se recupera y devuelve la cantidad de tiempo que ha pasado desde el ultimo fotograma.
 	 * 
 	 * La variable delta representa el tiempo transcurrido desde la ultima actualizacion del cuadro. Cuanto mayor sea el
 	 * delta, menor sera la velocidad de fotogramas. Cuanto menor sea el delta, mayor sera la velocidad de fotogramas. Si la
 	 * velocidad de fotogramas esta limitada a 60 fotogramas por segundo, NUNCA deberia existir un valor delta inferior a
-	 * 16. */
+	 * 16.
+	 */
 
 	protected boolean running = false;
 
@@ -31,13 +33,15 @@ public class Delta {
 	int x = 10, y = 10;
 	int dx = 1, dy = 1; // Representa el movimiento dinamico
 
-	/* La resolucion del temporizador se define como (de los documentos LWJGL)
+	/*
+	 * La resolucion del temporizador se define como (de los documentos LWJGL)
 	 * "el numero de tics que... el temporizador hace en un segundo". Divide el valor actual del temporizador en tics
-	 * (getTime) por la resolución del temporizador para obtener el tiempo en segundos. Como quiero el tiempo en
+	 * (getTime) por la resolucion del temporizador para obtener el tiempo en segundos. Como quiero el tiempo en
 	 * milisegundos, lo multiplico por 1000.
 	 * 
 	 * Sys.getTime se creo para usos como LWJGL con aspectos como la precision y el rendimiento en mente.
-	 * System.currentTimeMillis, sin embargo, no lo fue. Sin embargo, es mas sencillo. */
+	 * System.currentTimeMillis, sin embargo, no lo fue. Sin embargo, es mas sencillo.
+	 */
 	private static long getTime() {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
@@ -81,8 +85,9 @@ public class Delta {
 
 			System.out.println(delta);
 
-			x += delta * dx * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
-			y += delta * dy * 0.1; // Velocidad vertical
+			// Hace falta la x;y dinamica? Si las saco no pasa nada
+			x += delta * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
+			y += delta * 0.1; // Velocidad vertical
 
 			// Dibuja una caja en las coordenadas xy del primer vertice y en xy del segundo vertice de la esquina
 			glRecti(x, y, x + 30, y + 30); // Esto es exactamente igual al modo inmediato
@@ -90,8 +95,10 @@ public class Delta {
 			// System.out.println(getDelta());
 
 			Display.update();
-			/* Lo importante es que Delta siempre sera mayor o igual a 16, por que lo unico que le puede pasar a nuestra velocidad
-			 * de fotogramas es que disminuira. */
+			/*
+			 * Lo importante es que Delta siempre sera mayor o igual a 16, por que lo unico que le puede pasar a nuestra velocidad
+			 * de fotogramas es que disminuira.
+			 */
 			Display.sync(60); // Aunque se cambie la cantidad de fotogramas la velocidad del rectangulo siempre sera la misma
 
 		}

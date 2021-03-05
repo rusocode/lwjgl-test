@@ -40,8 +40,8 @@ public class Estados {
 
 		while (running && !Display.isCloseRequested()) {
 
-			checkInput();
 			render();
+			checkInput();
 
 			Display.update();
 			Display.sync(60);
@@ -54,7 +54,7 @@ public class Estados {
 
 	private void create() {
 		glMatrixMode(GL_PROJECTION);
-		glOrtho(0, 640, 0, 480, 1, -1); // esq inf izquierda
+		glOrtho(0, 640, 480, 0, 1, -1); // esq sup izquierda
 		glMatrixMode(GL_MODELVIEW);
 	}
 
