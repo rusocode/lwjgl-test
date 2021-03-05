@@ -83,6 +83,15 @@ public class Delta {
 			/*
 			 * Sin el delta, se puede actualizar el "movimiento" del cuadro sumandole + 1 a x en cada vuelta del ciclo, siendo lo
 			 * mismo que multiplicar el delta por 0.1.
+			 * 
+			 * PERO OJO!
+			 * 
+			 * No es buena idea hacer esto, ya que si tenemos una caida de FPS el movimiento sera muy lento.
+			 * Al contrario de usar el tiempo delta, el juego termina funcionando a la misma velocidad (con saltos) si es que los
+			 * FPS disminuyen. La unica diferencia aca es que solo se renderizan menos fotogramas.
+			 * 
+			 * Explicacion detallada de por no es bueno hacer eso: https://www.youtube.com/watch?v=pctGOMDW-HQ
+			 * 
 			 */
 			x += delta * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
 			y += delta * 0.1; // Velocidad vertical
