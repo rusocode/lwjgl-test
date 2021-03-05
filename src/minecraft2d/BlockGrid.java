@@ -24,9 +24,10 @@ class BlockGrid {
 
 	public BlockGrid() {
 
-		// Crea una matriz de 300 posiciones
+		// Crea una matriz de 300 posiciones (20 x 15)
 		blocks = new Block[columnas][filas];
 
+		// Se estan creando 300 objetos!
 		for (int x = 0; x < columnas; x++) {
 			for (int y = 0; y < filas; y++) {
 				// Crea un bloque y lo agrega a la matriz

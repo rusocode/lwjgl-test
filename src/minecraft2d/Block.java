@@ -15,7 +15,6 @@ public class Block {
 	private BlockType type;
 	private float x;
 	private float y;
-
 	private Texture texture;
 
 	public Block(BlockType type, float x, float y) {

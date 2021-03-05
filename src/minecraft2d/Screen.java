@@ -19,7 +19,7 @@ public class Screen {
 
 	private BlockGrid grid;
 
-	private BlockType type = BlockType.BRICK; // Bloque de ladrillo por defecto
+	private BlockType type = BlockType.BRICK; // Bloque de ladrillo seleccionado por defecto
 	private int x, y;
 	private boolean mouseEnabled = true;
 
