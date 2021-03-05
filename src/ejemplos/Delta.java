@@ -26,12 +26,9 @@ public class Delta {
 	 * 16.
 	 */
 
-	protected boolean running = false;
-
 	private static long lastFrame;
 
-	int x = 10, y = 10;
-	int dx = 1, dy = 1; // Representa el movimiento dinamico
+	private int x = 10, y = 10;
 
 	/*
 	 * La resolucion del temporizador se define como (de los documentos LWJGL)
@@ -72,12 +69,10 @@ public class Delta {
 
 		create();
 
-		running = true;
-
 		// En la primera vuelta del loop se calcula el tiempo del ultimo fotograma ya que nunca se inicializa
 		lastFrame = getTime();
 
-		while (running && !Display.isCloseRequested()) {
+		while (!Display.isCloseRequested()) {
 
 			render();
 
@@ -85,14 +80,15 @@ public class Delta {
 
 			System.out.println(delta);
 
-			// Hace falta la x;y dinamica? Si las saco no pasa nada
+			/*
+			 * Sin el delta, se puede actualizar el "movimiento" del cuadro sumandole + 1 a x en cada vuelta del ciclo, siendo lo
+			 * mismo que multiplicar el delta por 0.1.
+			 */
 			x += delta * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
 			y += delta * 0.1; // Velocidad vertical
 
 			// Dibuja una caja en las coordenadas xy del primer vertice y en xy del segundo vertice de la esquina
 			glRecti(x, y, x + 30, y + 30); // Esto es exactamente igual al modo inmediato
-
-			// System.out.println(getDelta());
 
 			Display.update();
 			/*
