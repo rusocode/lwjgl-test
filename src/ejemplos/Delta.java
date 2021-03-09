@@ -85,7 +85,7 @@ public class Delta {
 			 * ¿Se puede actualizar el movimiento del frame sin el Delta?
 			 * Si se puede, pero cuando haya una caida o subida de FPS, ya sea por que tenemos una maquina rapida o lenta, el
 			 * movimiento no sera el mismo. Al contrario de usar el tiempo delta, el juego termina funcionando a la misma velocidad
-			 * independientemente de los FPS, con la diferencia de que si hay una caida de FPS el movimiento cumplira la misma
+			 * independiente de los FPS, con la diferencia de que si hay una caida de FPS el movimiento cumplira la misma
 			 * distancia en el mismo tiempo pero en menos frames (es decir, con saltos) y en una subida, sera mas fluido.
 			 * 
 			 * Explicacion detallada de por no es bueno hacer eso: https://www.youtube.com/watch?v=pctGOMDW-HQ
