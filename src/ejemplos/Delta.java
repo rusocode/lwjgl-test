@@ -29,6 +29,7 @@ public class Delta {
 	private static long lastFrame;
 
 	private int x = 10, y = 10;
+	private float speed = 0.1f;
 
 	/*
 	 * La resolucion del temporizador se define como (de los documentos LWJGL)
@@ -81,20 +82,17 @@ public class Delta {
 			System.out.println(delta);
 
 			/*
-			 * Sin el delta, se puede actualizar el "movimiento" del cuadro sumandole + 1 a x en cada vuelta del ciclo, siendo lo
-			 * mismo que multiplicar el delta por 0.1.
-			 * 
-			 * PERO OJO!
-			 * 
-			 * No es buena idea hacer esto, ya que si tenemos una caida de FPS el movimiento sera muy lento.
-			 * Al contrario de usar el tiempo delta, el juego termina funcionando a la misma velocidad (con saltos) si es que los
-			 * FPS disminuyen. La unica diferencia aca es que solo se renderizan menos fotogramas.
+			 * ¿Se puede actualizar el movimiento del frame sin el Delta?
+			 * Si se puede, pero cuando haya una caida o subida de FPS, ya sea por que tenemos una maquina rapida o lenta, el
+			 * movimiento no sera el mismo. Al contrario de usar el tiempo delta, el juego termina funcionando a la misma velocidad
+			 * independientemente de los FPS, con la diferencia de que si hay una caida de FPS el movimiento cumplira la misma
+			 * distancia en el mismo tiempo pero en menos frames (es decir, con saltos) y en una subida, sera mas fluido.
 			 * 
 			 * Explicacion detallada de por no es bueno hacer eso: https://www.youtube.com/watch?v=pctGOMDW-HQ
 			 * 
 			 */
-			x += delta * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
-			y += delta * 0.1; // Velocidad vertical
+			x += delta * 1 * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
+			y += delta * 1 * 0.1; // Velocidad vertical
 
 			// Dibuja una caja en las coordenadas xy del primer vertice y en xy del segundo vertice de la esquina
 			glRecti(x, y, x + 30, y + 30); // Esto es exactamente igual al modo inmediato
@@ -104,7 +102,7 @@ public class Delta {
 			 * Lo importante es que Delta siempre sera mayor o igual a 16, por que lo unico que le puede pasar a nuestra velocidad
 			 * de fotogramas es que disminuira.
 			 */
-			Display.sync(60); // Aunque se cambie la cantidad de fotogramas la velocidad del rectangulo siempre sera la misma
+			Display.sync(30); // Aunque se cambie la cantidad de fotogramas la velocidad del rectangulo siempre sera la misma
 
 		}
 
