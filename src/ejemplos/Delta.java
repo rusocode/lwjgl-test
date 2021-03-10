@@ -20,10 +20,10 @@ public class Delta {
 	 * En primer lugar, la hora del sistema se almacena en una variable de tipo long llamada "lastFrame". Luego, en el bucle
 	 * del juego, se recupera y devuelve la cantidad de tiempo que ha pasado desde el ultimo fotograma.
 	 * 
-	 * La variable delta representa el tiempo transcurrido desde la ultima actualizacion del cuadro. Cuanto mayor sea el
-	 * delta, menor sera la velocidad de fotogramas. Cuanto menor sea el delta, mayor sera la velocidad de fotogramas. Si la
-	 * velocidad de fotogramas esta limitada a 60 fotogramas por segundo, NUNCA deberia existir un valor delta inferior a
-	 * 16.
+	 * La variable Delta representa el tiempo transcurrido desde la ultima actualizacion del cuadro. Cuanto mayor sea el
+	 * Delta, menor sera la velocidad (o cantidad?) de fotogramas. Cuanto menor sea el Delta, mayor sera la velocidad de
+	 * fotogramas. Si la velocidad de fotogramas esta limitada a 60 FPS, NUNCA deberia existir un valor Delta inferior a 16,
+	 * por que lo unico que le puede pasar a nuestra velocidad de fotogramas es que disminuira.
 	 */
 
 	private static long lastFrame;
@@ -32,10 +32,13 @@ public class Delta {
 	private float speed = 0.1f;
 
 	/*
-	 * La resolucion del temporizador se define como (de los documentos LWJGL)
-	 * "el numero de tics que... el temporizador hace en un segundo". Divide el valor actual del temporizador en tics
-	 * (getTime) por la resolucion del temporizador para obtener el tiempo en segundos. Como quiero el tiempo en
-	 * milisegundos, lo multiplico por 1000.
+	 * Hora del sistema
+	 * 
+	 * La resolucion del temporizador se define como (de los documentos LWJGL) "el numero de tics que... el temporizador
+	 * hace en un segundo".
+	 * 
+	 * Divide el valor actual del temporizador en tics (getTime) por la resolucion del temporizador para obtener el tiempo
+	 * en segundos. Como quiero el tiempo en milisegundos, lo multiplico por 1000.
 	 * 
 	 * Sys.getTime se creo para usos como LWJGL con aspectos como la precision y el rendimiento en mente.
 	 * System.currentTimeMillis, sin embargo, no lo fue. Sin embargo, es mas sencillo.
@@ -48,7 +51,7 @@ public class Delta {
 		long currentTime = getTime();
 		// Diferencia entre el tiempo actual y el ultimo fotograma
 		double delta = (double) (currentTime - lastFrame);
-		lastFrame = getTime(); // Estable el tiempo actual en lastFrame
+		lastFrame = getTime(); // Estable el tiempo actual despues de calcular el delta
 		return delta;
 	}
 
@@ -83,26 +86,31 @@ public class Delta {
 
 			/*
 			 * ¿Se puede actualizar el movimiento del frame sin el Delta?
-			 * Si se puede, pero cuando haya una caida o subida de FPS, ya sea por que tenemos una maquina rapida o lenta, el
-			 * movimiento no sera el mismo. Al contrario de usar el tiempo delta, el juego termina funcionando a la misma velocidad
-			 * independiente de los FPS, con la diferencia de que si hay una caida de FPS el movimiento cumplira la misma
-			 * distancia en el mismo tiempo pero en menos frames (es decir, con saltos) y en una subida, sera mas fluido.
+			 * Si se puede, pero cuando haya una caida o subida de FPS, el movimiento no sera el mismo, es decir si disminuyen los
+			 * FPS, la velocidad disminuira, y si aumentan, la velocidad sera mas rapida.
+			 * Al contrario de usar el tiempo delta, el frame llegara al destino en el mismo tiempo, idependientemente de si hay una
+			 * caida (frames con saltos) o subida de FPS.
 			 * 
-			 * Explicacion detallada de por no es bueno hacer eso: https://www.youtube.com/watch?v=pctGOMDW-HQ
+			 * Explicacion detallada -> https://www.youtube.com/watch?v=pctGOMDW-HQ
+			 * Explicacion corta y simple -> https://www.youtube.com/watch?v=C1_2XlPE6s8
 			 * 
 			 */
-			x += delta * 1 * 0.1; // Velocidad horizontal relentizada a 10 veces (0.1)
-			y += delta * 1 * 0.1; // Velocidad vertical
+			x += delta * speed; // Velocidad horizontal relentizada a 10 veces (0.1)
+			y += delta * speed; // Velocidad vertical
 
 			// Dibuja una caja en las coordenadas xy del primer vertice y en xy del segundo vertice de la esquina
 			glRecti(x, y, x + 30, y + 30); // Esto es exactamente igual al modo inmediato
 
 			Display.update();
+
 			/*
-			 * Lo importante es que Delta siempre sera mayor o igual a 16, por que lo unico que le puede pasar a nuestra velocidad
-			 * de fotogramas es que disminuira.
+			 * Aunque se cambie la cantidad de fotogramas, la velocidad del rectangulo siempre sera la misma, siempre y cuando se
+			 * use el Delta.
+			 * 
+			 * NOTA: Al pasarle menos FPS usando el Delta, la velocidad del frame no cumple el mismo tiempo que con FPS mas altos,
+			 * ¿Por que?.
 			 */
-			Display.sync(30); // Aunque se cambie la cantidad de fotogramas la velocidad del rectangulo siempre sera la misma
+			Display.sync(60);
 
 		}
 
