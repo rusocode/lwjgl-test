@@ -89,7 +89,7 @@ public class TextureDemo {
 	private Texture loadTexture(String key) {
 
 		try {
-			return TextureLoader.getTexture("PNG", new FileInputStream(new File("res/img/" + key + ".png")));
+			return TextureLoader.getTexture("PNG", new FileInputStream(new File("assets/textures/" + key + ".png")));
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "No se pudo encontrar la imagen", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {

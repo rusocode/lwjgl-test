@@ -6,12 +6,21 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+// import org.lwjgl.openal.AL;
+// import org.lwjgl.util.WaveData;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 // LWJGL maneja la ventana de forma estatica
 import static org.lwjgl.opengl.GL11.*;
+
+// import static org.lwjgl.openal.AL10.*;
 
 // Uso de las clases de teclado y mouse con LWJGL
 public class Input {
@@ -22,19 +31,22 @@ public class Input {
 	private static final int BOX_HEIGHT = 50;
 	private static final int BOX_WIDHT = 50;
 
-	private static boolean somethingIsSelected = false; // ?
+	private static boolean somethingIsSelected; // ?
 
-	public static void main(String args[]) {
+	int buffer, source;
+
+	public static void main(String args[]) throws FileNotFoundException {
 		try {
 			new Input().start();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			Display.destroy();
+			// AL.destroy();
 			System.exit(1);
 		}
 	}
 
-	public void start() throws LWJGLException {
+	public void start() throws LWJGLException, FileNotFoundException {
 
 		Display.setTitle("Input Test");
 		Display.setDisplayMode(new DisplayMode(640, 480));
@@ -44,6 +56,9 @@ public class Input {
 		shapes.add(new Box(10, 10));
 
 		create();
+
+		
+//		AL.create();
 
 		// Bucle de renderizacion en donde se realiza el manejo de entradas, la logica del juego y la adm de recursos
 		while (!Display.isCloseRequested()) {
@@ -55,6 +70,8 @@ public class Input {
 
 		}
 
+//		alDeleteBuffers(buffer);
+//		AL.destroy();
 		Display.destroy();
 
 	}
@@ -90,17 +107,17 @@ public class Input {
 		/* Keyboard.next() obtiene el proximo evento del teclado, capturando una sola pulsacion de tecla. */
 		while (Keyboard.next()) {
 
+			// Si se pulso la tecla C, entonces...
+			if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+				// Resto el ancho y alto de la caja a los limites xy para no pasarse de estos
+				shapes.add(new Box((int) (Math.random() * (640 - BOX_WIDHT)), (int) (Math.random() * (480 - BOX_HEIGHT))));
+				// alSourcePlay(source);
+			}
+
 			// Elimina todas las cajas
 			if (Keyboard.isKeyDown(Keyboard.KEY_L)) shapes.clear();
 
 		}
-
-		/*
-		 * Si se pulso la tecla C, entonces...
-		 * Resto el ancho de la caja al limite x para no pasarse de este.
-		 */
-		if (Keyboard.isKeyDown(Keyboard.KEY_C))
-			shapes.add(new Box((int) (Math.random() * (640 - BOX_WIDHT)), (int) (Math.random() * (480 - BOX_HEIGHT))));
 
 		// Si se pulso la tecla escape, cierra la aplicacion
 		if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -134,6 +151,21 @@ public class Input {
 
 	}
 
+	/* private void loadSound() {
+		try {
+			WaveData data = WaveData
+					.create(new BufferedInputStream(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "wood.wav")));
+			buffer = alGenBuffers();
+			alBufferData(buffer, data.format, data.data, data.samplerate);
+			data.dispose();
+			source = alGenSources();
+			alSourcei(source, AL_BUFFER, buffer);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	} */
+
 	private static class Box {
 
 		public int x, y;
@@ -152,7 +184,7 @@ public class Input {
 
 		// Si se selecciono la caja dentro sus limites
 		boolean isInBounds(int mouseX, int mouseY) {
-			return mouseX >= x && mouseX <= x + 50 && mouseY >= y && mouseY <= y + 50;
+			return mouseX >= x && mouseX <= x + BOX_WIDHT && mouseY >= y && mouseY <= y + BOX_HEIGHT;
 		}
 
 		// dx/dy significan delta-x y delta-y
