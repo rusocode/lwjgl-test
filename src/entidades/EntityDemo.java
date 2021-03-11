@@ -24,9 +24,11 @@ public class EntityDemo {
 		return delta;
 	}
 
-	/* Las clases internas estaticas solo tienen acceso a los miembros estaticos de la clase adjunta.
+	/*
+	 * Las clases internas estaticas solo tienen acceso a los miembros estaticos de la clase adjunta.
 	 * 
-	 * https://javadesdecero.es/poo/clases-internas/ */
+	 * https://javadesdecero.es/poo/clases-internas/
+	 */
 	private static class Box extends AbstractMovableEntity {
 
 		// Le pasa la posicion x e y, y el ancho y alto de la caja al constructor de la superclase
