@@ -69,8 +69,10 @@ public class ThreeDeeDemo {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 
-		/* Crea una perspectiva con un angulo de 30 grados (campo de vision), relacion de aspecto de 640/480, 0.001f zNear
-		 * (cerca) y 100 zFar (lejos). */
+		/*
+		 * Crea una perspectiva con un angulo de 30 grados (campo de vision), relacion de aspecto de 640/480, 0.001f zNear
+		 * (cerca) y 100 zFar (lejos).
+		 */
 		// +x esta a la derecha
 		// +y esta en la cima
 		// +z es para la camara
