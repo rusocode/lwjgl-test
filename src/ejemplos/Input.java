@@ -6,9 +6,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-// import org.lwjgl.openal.AL;
-// import org.lwjgl.util.WaveData;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,8 +16,6 @@ import java.io.FileNotFoundException;
 
 // LWJGL maneja la ventana de forma estatica
 import static org.lwjgl.opengl.GL11.*;
-
-// import static org.lwjgl.openal.AL10.*;
 
 // Uso de las clases de teclado y mouse con LWJGL
 public class Input {
@@ -41,7 +36,6 @@ public class Input {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			Display.destroy();
-			// AL.destroy();
 			System.exit(1);
 		}
 	}
@@ -57,9 +51,6 @@ public class Input {
 
 		create();
 
-		
-//		AL.create();
-
 		// Bucle de renderizacion en donde se realiza el manejo de entradas, la logica del juego y la adm de recursos
 		while (!Display.isCloseRequested()) {
 
@@ -70,8 +61,6 @@ public class Input {
 
 		}
 
-//		alDeleteBuffers(buffer);
-//		AL.destroy();
 		Display.destroy();
 
 	}
@@ -108,11 +97,9 @@ public class Input {
 		while (Keyboard.next()) {
 
 			// Si se pulso la tecla C, entonces...
-			if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_C))
 				// Resto el ancho y alto de la caja a los limites xy para no pasarse de estos
 				shapes.add(new Box((int) (Math.random() * (640 - BOX_WIDHT)), (int) (Math.random() * (480 - BOX_HEIGHT))));
-				// alSourcePlay(source);
-			}
 
 			// Elimina todas las cajas
 			if (Keyboard.isKeyDown(Keyboard.KEY_L)) shapes.clear();
@@ -150,21 +137,6 @@ public class Input {
 		}
 
 	}
-
-	/* private void loadSound() {
-		try {
-			WaveData data = WaveData
-					.create(new BufferedInputStream(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "wood.wav")));
-			buffer = alGenBuffers();
-			alBufferData(buffer, data.format, data.data, data.samplerate);
-			data.dispose();
-			source = alGenSources();
-			alSourcei(source, AL_BUFFER, buffer);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	} */
 
 	private static class Box {
 
