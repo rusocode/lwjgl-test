@@ -18,6 +18,8 @@ public class ThreeDeeDemo {
 
 	private Point[] points;
 
+	Random random;
+
 	// Velocidad a la que viaja la "camara"
 	private float speed;
 
@@ -87,7 +89,7 @@ public class ThreeDeeDemo {
 	private void setUpEntities() {
 		// Crea un array de Point con 1000 posiciones
 		points = new Point[1000];
-		Random random = new Random();
+		random = new Random();
 
 		// Crea un punto con:
 		// x aleatoria entre -50 y +50

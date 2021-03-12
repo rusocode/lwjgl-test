@@ -11,16 +11,6 @@ public class SimpleOGLRenderer {
 	private final int width = 640;
 	private final int height = 480;
 
-	public static void main(String[] args) {
-		try {
-			new SimpleOGLRenderer().start();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			Display.destroy();
-			System.exit(1);
-		}
-	}
-
 	private void start() throws LWJGLException {
 
 		setUpDisplay();
@@ -73,6 +63,16 @@ public class SimpleOGLRenderer {
 
 	private void input() {
 
+	}
+
+	public static void main(String[] args) {
+		try {
+			new SimpleOGLRenderer().start();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			Display.destroy();
+			System.exit(1);
+		}
 	}
 
 }
