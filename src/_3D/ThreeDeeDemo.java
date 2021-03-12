@@ -128,7 +128,7 @@ public class ThreeDeeDemo {
 
 			// Restablece la velocidad a cero y restablece la posicion
 			if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
-				speed = 0; // f?
+				speed = 0;
 				glLoadIdentity();
 			}
 
