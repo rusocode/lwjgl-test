@@ -68,22 +68,22 @@ public class SideScrollerDemo {
 		// Coloca otra matriz, un clon de la actual, en la pila de matrices
 		glPushMatrix();
 
-		// Push the screen to the left or to the right, depending on translate_x.
+		// Empuje la pantalla a la izquierda o hacia la derecha, dependiendo de translate_x
 		glTranslatef(translate_x, 0, 0);
 
-		// If we're pressing the space-bar and the mouse is inside the window, increase/decrease our
-		// translate_x by the dynamic x movement of the mouse.
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && Mouse.getX() > 0 && Mouse.getX() < 639) {
-			translate_x += Mouse.getDX();
-		}
+		/*
+		 * Si estamos presionando la barra de espacio y el mouse esta dentro de la ventana, aumente/disminuya el
+		 * translate_x por el movimiento dinamico X del mouse.
+		 */
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && Mouse.getX() > 0 && Mouse.getX() < 639) translate_x += Mouse.getDX();
 
-		// Retrieve the "true" coordinates of the mouse.
+		// Recupera las coordenadas "verdaderas" del mouse
 		float mousex = Mouse.getX() - translate_x;
 		float mousey = 480 - Mouse.getY() - 1;
 
 		System.out.println("Mouse: x " + mousex + ", y " + mousey);
 
-		// Do some OpenGL rendering (code from SimpleOGLRenderer.java).
+		// Hace un poco de representacion de OpenGL (codigo de SimpleoglRenderer .Java)
 		glBegin(GL_QUADS);
 		glVertex2i(400, 400); // Upper-left
 		glVertex2i(450, 400); // Upper-right
@@ -96,7 +96,7 @@ public class SideScrollerDemo {
 		glVertex2i(200, 200);
 		glEnd();
 
-		// Dispose of the translations on the matrix.
+		// Desecha las traducciones en la matriz
 		glPopMatrix();
 
 	}
