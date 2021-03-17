@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 /**
- * Renderiza un triangulo de color usando un objeto de bufer de vertice (vertex buffer object).
+ * Renderiza un triangulo de color usando un objeto de buffer de vertice (vertex buffer object).
  *
  */
 
