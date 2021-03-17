@@ -82,7 +82,7 @@ public class AdvancedRendering {
 
 	private void setUpDisplay() {
 		try {
-			Display.setTitle("Three Dee Demo");
+			Display.setTitle("Renderizados");
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setVSyncEnabled(true);
 			Display.create();
@@ -94,12 +94,15 @@ public class AdvancedRendering {
 	}
 
 	private void setUpOpenGL() {
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
+
 		// Configura zFar en 1000000 para ver todos los puntos (propositos de evaluacion comparativa)
 		gluPerspective((float) 30, Display.getWidth() / Display.getHeight(), 0.001f, 1000000000000L);
 		glMatrixMode(GL_MODELVIEW);
-		// Habilita el GL_DEPTH_TEST para decirle a OpenGL que vuelva a verificar la validez del dibujo 3D
+
+		// Vuelve a verificar la validez del dibujo 3D
 		glEnable(GL_DEPTH_TEST);
 	}
 
@@ -108,9 +111,13 @@ public class AdvancedRendering {
 		points = new Point[3000000];
 		random = new Random();
 
-		// Los puntos aparecen distribuidos uniformemente a lo largo de la pantalla
+		/*
+		 * Modifique la variable zFar para adaptarme a points.length. Los puntos, no importa cuanto, ahora aparecen
+		 * distribuidos uniformemente a lo largo de la pantalla.
+		 */
 		for (int i = 0; i < points.length; i++)
-			points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f, random.nextInt(200) - 200);
+			points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f,
+					random.nextInt(points.length / 50) - points.length / 50);
 
 	}
 
@@ -119,21 +126,20 @@ public class AdvancedRendering {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		/*
-		 * Divide entre 16 porque obtiene un delta de 16 a 60 fps. Si es 60 fps, el delta sera 1.0f y todas las llamadas de
-		 * entrada seran las mismas que antes.
+		 * Divide el delta entre 16 para obtener un delta de 16 a 60 fps. Si es 60 fps, el delta sera 1.0f y todas las
+		 * llamadas de entrada seran las mismas que antes.
 		 */
 		delta = getDelta() / 16f;
 
+		// Empuja la pantalla hacia adentro a la velocidad especificada
 		glTranslatef(0, 0, speed * delta);
-
-		vao();
 
 		switch (mode) {
 
 		case DISPLAY_LISTS:
 
 			// Dibuja nuestra lista de visualizacion
-			glCallList(displayList());
+			glCallList(displayList);
 
 			break;
 
@@ -143,7 +149,7 @@ public class AdvancedRendering {
 			glEnableClientState(GL_VERTEX_ARRAY);
 
 			// Le dice a OpenGL que use nuestra VBO
-			glBindBuffer(GL_ARRAY_BUFFER, vbo());
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 
 			// Dile a OpenGL que busque los datos en el VBO vinculado con 3 componentes (xyz) y con el tipo float
 			glVertexPointer(3, GL_FLOAT, 0, 0L);
@@ -228,14 +234,14 @@ public class AdvancedRendering {
 
 	private int displayList() {
 
-		// Genera un identificador para una lista de visualizacion
+		// Genera un ID para la lista de visualizacion
 		displayList = glGenLists(1);
 
-		// Crea la lista de visualizacion usando el identificador displayList
+		// Crea la lista de visualizacion usando el ID displayList
 		// Todas las llamadas posteriores para renderizado se almacenaran en la lista de visualizacion
 		glNewList(displayList, GL_COMPILE);
-		glBegin(GL_POINTS);
 
+		glBegin(GL_POINTS);
 		for (Point p : points)
 			glVertex3f(p.x, p.y, p.z);
 
