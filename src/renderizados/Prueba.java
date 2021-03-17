@@ -29,6 +29,19 @@ public class Prueba {
 		IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS
 	}
 
+	RenderMode mode = RenderMode.IMMEDIATE;
+
+	// The speed in which the "camera" travels
+	private static float speed;
+
+	private Point[] points;
+	private Random random;
+
+	private int displayList;
+	private FloatBuffer vertexArray;
+	private int vertexBufferObject;
+
+	private float delta;
 	private static long lastFrame;
 
 	private static float getDelta() {
@@ -42,44 +55,18 @@ public class Prueba {
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
-	// The speed in which the "camera" travels
-	private static float speed = 0.0f;
-
 	private void start() throws LWJGLException {
-		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.setTitle("Three Dee Demo");
-			Display.setVSyncEnabled(true);
-			Display.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			Display.destroy();
-			System.exit(1);
-		}
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		// I set the zFar to 1000000 so we can see all the points. (benchmarking purposes)
-		gluPerspective((float) 30, Display.getWidth() / Display.getHeight(), 0.001f, 1000000000000L);
-		glMatrixMode(GL_MODELVIEW);
-		// I enable this to tell OpenGL to re-check the validity of the 3D drawing.
-		glEnable(GL_DEPTH_TEST);
-
-		Point[] points = new Point[3000000];
-		Random random = new Random();
-		for (int i = 0; i < points.length; i++) {
-			// I altered the zFar variable to adapt to the points.length.
-			// Points, no matter how much, now appear evenly distributed along the screen
-			points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f,
-					random.nextInt(points.length / 50) - points.length / 50);
-		}
+		setUpDisplay();
+		setUpOpenGL();
+		setUpEntities();
 
 		/**
 		 * Display lists
 		 */
 
 		// Generate a handle to a display list
-		int displayList = glGenLists(1);
+		displayList = glGenLists(1);
 		// Create the display list using the displayList handle
 		// All subsequent calls for rendering will be stored in the display list
 		glNewList(displayList, GL_COMPILE);
@@ -97,7 +84,7 @@ public class Prueba {
 
 		// Create a new FloatBuffer (complex array of floats) with the capacity
 		// of the length of the points * 3 (because we have 3 vertices per point)
-		FloatBuffer vertexArray = BufferUtils.createFloatBuffer(points.length * 3);
+		vertexArray = BufferUtils.createFloatBuffer(points.length * 3);
 		// Iterate over all the points and store them in the FloatBuffer
 		for (Point p : points) {
 			vertexArray.put(new float[] { p.x, p.y, p.z });
@@ -106,7 +93,7 @@ public class Prueba {
 		vertexArray.flip();
 
 		// Create the handle for the VBO
-		int vertexBufferObject = glGenBuffers();
+		vertexBufferObject = glGenBuffers();
 		// Bind the VBO for usage (in this case: storing information)
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
 		// Store all the contents of the FloatBuffer in the VBO.
@@ -117,91 +104,11 @@ public class Prueba {
 		lastFrame = getTime();
 
 		System.out.println("Render mode set to Immediate Mode.");
-		RenderMode mode = RenderMode.IMMEDIATE;
 
 		while (!Display.isCloseRequested()) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			// I divided by 16 because you get a delta of 16 at 60fps.
-			// If it's 60fps, the delta will be 1.0f, and all input calls
-			// will be the same as before.
-			float delta = getDelta() / 16f;
-
-			glTranslatef(0, 0, speed * delta);
-
-			switch (mode) {
-			case DISPLAY_LISTS:
-				// Draw our display list
-				glCallList(displayList);
-				break;
-			case VERTEX_BUFFER_OBJECTS:
-				// Enable Vertex Arrays (VBOs)
-				glEnableClientState(GL_VERTEX_ARRAY);
-				// Tell OpenGL to use our VBO
-				glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-				// Tell OpenGL to find the data in the bound VBO with 3 co
-				// mponents (xyz) and with the type float.
-				glVertexPointer(3, GL_FLOAT, 0, 0L);
-				// Tell OpenGL to draw the data supplied by the pointer method
-				// as points.length amount of points
-				glDrawArrays(GL_POINTS, 0, points.length);
-				// Unbind the VBO
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				// Disable Vertex Arrays (VBOs)
-				glDisableClientState(GL_VERTEX_ARRAY);
-				break;
-			case VERTEX_ARRAYS:
-				// Enable Vertex Arrays
-				glEnableClientState(GL_VERTEX_ARRAY);
-				// Tell OpenGL to find the data in the vertexArray buffer
-				// with 3 components (xyz)
-				glVertexPointer(3, 0, vertexArray);
-				// Tell OpenGL to draw the data supplied by the pointer method
-				// as points.length amount of points
-				glDrawArrays(GL_POINTS, 0, points.length);
-				// Disable Vertex Arrays
-				glDisableClientState(GL_VERTEX_ARRAY);
-				break;
-			case IMMEDIATE:
-				glBegin(GL_POINTS);
-				for (Point p : points) {
-					glVertex3f(p.x, p.y, p.z);
-				}
-				glEnd();
-				break;
-			}
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-				speed += 0.01f * delta;
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-				speed -= 0.01f * delta;
-			}
-			while (Keyboard.next()) {
-				if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-					speed = 0f;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
-					System.out.println("Render mode set to Vertex Buffer Objects.");
-					mode = RenderMode.VERTEX_BUFFER_OBJECTS;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
-					System.out.println("Render mode set to Vertex Arrays.");
-					mode = RenderMode.VERTEX_ARRAYS;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
-					System.out.println("Render mode set to Display Lists.");
-					mode = RenderMode.DISPLAY_LISTS;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
-					System.out.println("Render mode set to Immediate Mode.");
-					mode = RenderMode.IMMEDIATE;
-				}
-				if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
-					speed = 0;
-					glLoadIdentity();
-				}
-			}
+			render();
+			input();
 
 			Display.update();
 			Display.sync(30);
@@ -214,6 +121,128 @@ public class Prueba {
 
 		Display.destroy();
 		System.exit(0);
+	}
+
+	private void setUpDisplay() {
+		try {
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			Display.setTitle("Three Dee Demo");
+			Display.setVSyncEnabled(true);
+			Display.create();
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			Display.destroy();
+			System.exit(1);
+		}
+	}
+
+	private void setUpOpenGL() {
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		// I set the zFar to 1000000 so we can see all the points. (benchmarking purposes)
+		gluPerspective((float) 30, Display.getWidth() / Display.getHeight(), 0.001f, 1000000000000L);
+		glMatrixMode(GL_MODELVIEW);
+		// I enable this to tell OpenGL to re-check the validity of the 3D drawing.
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	private void setUpEntities() {
+		points = new Point[3000000];
+		random = new Random();
+		for (int i = 0; i < points.length; i++) {
+			// I altered the zFar variable to adapt to the points.length.
+			// Points, no matter how much, now appear evenly distributed along the screen
+			points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f,
+					random.nextInt(points.length / 50) - points.length / 50);
+		}
+	}
+
+	private void render() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// I divided by 16 because you get a delta of 16 at 60fps.
+		// If it's 60fps, the delta will be 1.0f, and all input calls
+		// will be the same as before.
+		delta = getDelta() / 16f;
+
+		glTranslatef(0, 0, speed * delta);
+
+		switch (mode) {
+		case DISPLAY_LISTS:
+			// Draw our display list
+			glCallList(displayList);
+			break;
+		case VERTEX_BUFFER_OBJECTS:
+			// Enable Vertex Arrays (VBOs)
+			glEnableClientState(GL_VERTEX_ARRAY);
+			// Tell OpenGL to use our VBO
+			glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+			// Tell OpenGL to find the data in the bound VBO with 3 co
+			// mponents (xyz) and with the type float.
+			glVertexPointer(3, GL_FLOAT, 0, 0L);
+			// Tell OpenGL to draw the data supplied by the pointer method
+			// as points.length amount of points
+			glDrawArrays(GL_POINTS, 0, points.length);
+			// Unbind the VBO
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			// Disable Vertex Arrays (VBOs)
+			glDisableClientState(GL_VERTEX_ARRAY);
+			break;
+		case VERTEX_ARRAYS:
+			// Enable Vertex Arrays
+			glEnableClientState(GL_VERTEX_ARRAY);
+			// Tell OpenGL to find the data in the vertexArray buffer
+			// with 3 components (xyz)
+			glVertexPointer(3, 0, vertexArray);
+			// Tell OpenGL to draw the data supplied by the pointer method
+			// as points.length amount of points
+			glDrawArrays(GL_POINTS, 0, points.length);
+			// Disable Vertex Arrays
+			glDisableClientState(GL_VERTEX_ARRAY);
+			break;
+		case IMMEDIATE:
+			glBegin(GL_POINTS);
+			for (Point p : points) {
+				glVertex3f(p.x, p.y, p.z);
+			}
+			glEnd();
+			break;
+		}
+
+	}
+
+	private void input() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			speed += 0.01f * delta;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+			speed -= 0.01f * delta;
+		}
+		while (Keyboard.next()) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+				speed = 0f;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
+				System.out.println("Render mode set to Vertex Buffer Objects.");
+				mode = RenderMode.VERTEX_BUFFER_OBJECTS;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
+				System.out.println("Render mode set to Vertex Arrays.");
+				mode = RenderMode.VERTEX_ARRAYS;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_3)) {
+				System.out.println("Render mode set to Display Lists.");
+				mode = RenderMode.DISPLAY_LISTS;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_4)) {
+				System.out.println("Render mode set to Immediate Mode.");
+				mode = RenderMode.IMMEDIATE;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+				speed = 0;
+				glLoadIdentity();
+			}
+		}
 	}
 
 	public static void main(String[] args) {
