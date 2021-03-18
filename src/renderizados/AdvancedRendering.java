@@ -86,7 +86,7 @@ public class AdvancedRendering {
 		 */
 
 		/*
-		 * Crea un nuevo FloatBuffer (arreglo complejo de flotantes) con la capacidad de la longitud de los puntos * 3 (porque
+		 * Crea un FloatBuffer (arreglo complejo de flotantes) con la longitud de la cantidad de puntos * 3 (porque
 		 * tenemos 3 vertices por punto).
 		 */
 		vertexArray = BufferUtils.createFloatBuffer(points.length * 3);
