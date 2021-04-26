@@ -78,7 +78,7 @@ public class Buffer {
 		// Digamos que estamos creando una textura RGBA rojo 1x1, nuestra configuracion del buffer se veria asi:
 		int width = 1; // 1 pixel de ancho
 		int height = 1; // 1 pixel de alto
-		int bpp = 4; // 4 bytes por pixel (RGBA) -> https://en.wikipedia.org/wiki/RGBA_color_model
+		final int bpp = 4; // 4 bytes por pixel (RGBA) -> https://en.wikipedia.org/wiki/RGBA_color_model
 
 		buffer = BufferUtils.createByteBuffer(width * height * bpp); // Crea una imagen de 1 pixel (4 bytes)
 
