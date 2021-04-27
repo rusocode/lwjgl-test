@@ -44,9 +44,11 @@ public class SimpleOGLRenderer {
 	}
 
 	private void setUpOpenGL() {
+		// La matriz projection controla la perspectiva aplicada a las primitivas; se utiliza de forma similar a modelview
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+		glLoadIdentity(); /* Inicializar "projection" */
 		glOrtho(0, 640, 0, 480, 1, -1);
+		// Se establece la matriz modelview, que controla la posicion de la camara respecto a las primitivas que renderizamos
 		glMatrixMode(GL_MODELVIEW);
 	}
 
