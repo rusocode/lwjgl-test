@@ -69,7 +69,7 @@ public class SideScrollerDemo {
 		glPushMatrix();
 
 		// Empuja la pantalla a la izquierda o hacia la derecha dependiendo de translate_x
-		glTranslatef(translate_x, 0, 0); // Esto mueve la camara?
+		glTranslatef(translate_x, 0, 0);
 
 		/*
 		 * Si la barra espaciadora esta presionada y el mouse se encuentra dentro de los limites horizontales de la ventana,
